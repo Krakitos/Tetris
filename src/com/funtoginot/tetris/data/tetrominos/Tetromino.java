@@ -4,8 +4,9 @@ package com.funtoginot.tetris.data.tetrominos;
  * Created by Morgan on 14/05/2014.
  */
 
+import com.funtoginot.tetris.data.utils.MatrixUtils;
+
 import java.awt.*;
-import java.util.Arrays;
 
 /**
  * Represente un tetromino (figure géométrique composée de quatre carrés, chacun ayant au moins un côté complètement
@@ -27,33 +28,14 @@ public class Tetromino {
      * Opère une rotation de 90° vers la gauche sur le tetromino
      */
     public void rotateLeft(){
-        int n = matrix.length;
-        for (int i = 0; i < n >> 1; i++) {
-            for (int j = i; j< n - 1 - i; j++) {
-                byte tmp = matrix[i][j];
-                matrix[i][j] = matrix[j][n - 1 - i];
-                matrix[j][n - 1 - i] = matrix[n - 1 - i][n - 1 - j];
-                matrix[n - 1 - i][n - 1 - j] = matrix[n - 1 - j][i];
-                matrix[n - 1 - j][i] = tmp;
-            }
-        }
+        MatrixUtils.rotateLeft(matrix);
     }
 
     /**
      * Opère une rotation de 90° vers la droite sur le tetromino
      */
     public void rotateRight(){
-        int n = matrix.length;
-
-        for (int i = 0; i < n >> 1; i++) {
-            for (int j = i; j< n - 1-i; j++) {
-                byte tmp = matrix[i][j];
-                matrix[i][j] = matrix[n - 1 - j][i];
-                matrix[n - 1 - j][i] = matrix[n - 1-i][n - 1 - j];
-                matrix[n - 1 - i][n - 1 - j] = matrix[j][n - 1 - i];
-                matrix[j][n - 1 - i] = tmp;
-            }
-        }
+        MatrixUtils.rotateRight(matrix);
     }
 
     /**
@@ -94,14 +76,8 @@ public class Tetromino {
 
     @Override
     public String toString() {
-        String printM = "";
-        for(byte[] line : matrix){
-            printM += Arrays.toString(line) +"\n";
-        }
-
         return "Tetromino{" +
-                "color=" + color + '\n'+
-                printM +
+                "color=" + color +
                 '}';
     }
 }
