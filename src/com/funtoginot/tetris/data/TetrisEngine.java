@@ -1,13 +1,12 @@
 package com.funtoginot.tetris.data;
 
-import com.funtoginot.tetris.data.time.TimeManager;
-import com.funtoginot.tetris.data.time.listeners.TickListener;
 import com.funtoginot.tetris.data.observers.TetrisObservable;
 import com.funtoginot.tetris.data.tetrominos.Tetromino;
 import com.funtoginot.tetris.data.tetrominos.TetrominosFactory;
+import com.funtoginot.tetris.data.time.TimeManager;
+import com.funtoginot.tetris.data.time.listeners.TickListener;
 
 import java.awt.event.KeyEvent;
-import java.util.Timer;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
@@ -18,7 +17,7 @@ public class TetrisEngine extends TetrisObservable implements TickListener {
     public static final int DEFAULT_COLUMNS_NUMBER = 10;
     public static final int DEFAULT_ROWS_NUMBER = 22;
 
-    private static final int DEFAULT_TIMER_TICK = 500;
+    private static final int DEFAULT_TIMER_TICK = 1000;
 
     private TimeManager timeManager;
     private AtomicBoolean isRunning; //Utilisation d'un AtomicBoolean car Timer s'exécute dans un autre processus.
@@ -105,7 +104,7 @@ public class TetrisEngine extends TetrisObservable implements TickListener {
             int[] fullLines = gameboard.deleteRowsFull();
 
             //Si on a des lignes pleines
-            if(fullLines.length > 0) {
+            if(fullLines != null && fullLines.length > 0) {
 
                 //On augmente les points de 100 * le nombre de lignes pleines ce tour ci
                 points = 100 * fullLines.length;
@@ -129,7 +128,6 @@ public class TetrisEngine extends TetrisObservable implements TickListener {
                 fireCurrentTetrominoChanged(sequence, next);
             }
         }else {
-            System.out.println("Tick");
             fireTimerTick(tick, sequence);
         }
     }
@@ -139,8 +137,9 @@ public class TetrisEngine extends TetrisObservable implements TickListener {
      * Défini cette touche comme le dernier évènement clavier. Une seule opération de mouvement est possible en un tick
      * @param keycode Le code de la touche pressée
      */
-    public void handleKeyPressed(int keycode){
-        sequence.lastKeyPressed = keycode;
+    public MovementSequence handleKeyPressed(int keycode){
+        sequence.handleKeyboardEvent(keycode);
+        return sequence;
     }
 
     /**
@@ -184,10 +183,10 @@ public class TetrisEngine extends TetrisObservable implements TickListener {
     public class MovementSequence {
 
         private Tetromino workingTetromino;
-        private int x;
-        private int y;
+        private int row;
+        private int column;
 
-        private int lastKeyPressed;
+        private byte availableMoves;
 
         /**
          * Renvoi le tetromino en cours de placement
@@ -203,36 +202,73 @@ public class TetrisEngine extends TetrisObservable implements TickListener {
          */
         public void newSequence(Tetromino newTetromino){
             workingTetromino = newTetromino;
-            x = (int)(Math.random() * (gameboard.getWidth() - workingTetromino.getWidth()));
-            y = 0;
+            row = -1;
+            column = (int)(Math.random() * (gameboard.getHeight() - workingTetromino.getHeight()));
         }
 
         /**
          * Met à jour la position du tetromino
          */
         public boolean update() {
-            boolean isLastMove = false;
+            availableMoves = gameboard.getAvailableMoves(workingTetromino, row, column);
 
-            switch(lastKeyPressed) {
+            //Si on ne peut pas aller plus loin, on drop la piece
+            if((availableMoves & TetrisBoard.TRANSLATE_BOTTOM) != 0){
+                ++row;
+            }else{
+
+            }
+
+            //Si aucun mouvement n'est disponible...
+            return availableMoves == 0;
+        }
+
+        public void handleKeyboardEvent(int keycode){
+
+            //Gestion des mutateurs
+            switch(keycode) {
+                case KeyEvent.VK_UP:{
+                    if((availableMoves & TetrisBoard.ROTATE_RIGHT) != 0) {
+                        workingTetromino.rotateRight();
+                    }
+                    break;
+                }
                 case KeyEvent.VK_DOWN : {
-
+                    if((availableMoves & TetrisBoard.ROTATE_LEFT) != 0) {
+                        workingTetromino.rotateLeft();
+                    }
                     break;
                 }
                 case KeyEvent.VK_RIGHT : {
-
+                    if((availableMoves & TetrisBoard.TRANSLATE_RIGHT) != 0) {
+                        ++column;
+                    }
                     break;
                 }
                 case KeyEvent.VK_LEFT : {
-
+                    if((availableMoves & TetrisBoard.TRANSLATE_LEFT) != 0) {
+                        --column;
+                    }
                     break;
                 }
                 case KeyEvent.VK_SPACE : {
-
+                    if((availableMoves & TetrisBoard.TRANSLATE_BOTTOM) != 0) {
+                        ++row;
+                    }
                     break;
                 }
             }
 
-            return isLastMove;
+            //On met à jour les mouvements possibles
+            availableMoves = gameboard.getAvailableMoves(workingTetromino, row, column);
+        }
+
+        public int getRow() {
+            return row;
+        }
+
+        public int getColumn() {
+            return column;
         }
     }
 }

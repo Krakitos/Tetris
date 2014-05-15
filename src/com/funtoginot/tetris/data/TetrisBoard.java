@@ -7,6 +7,12 @@ import com.funtoginot.tetris.data.tetrominos.Tetromino;
  */
 public class TetrisBoard {
 
+    public static final int ROTATE_LEFT = 1;
+    public static final int ROTATE_RIGHT = 1 << 1;
+    public static final int TRANSLATE_LEFT = 1 << 2;
+    public static final int TRANSLATE_RIGHT = 1 << 3;
+    public static final int TRANSLATE_BOTTOM = 1 << 4;
+
     private final int width;
     private final int height;
 
@@ -24,7 +30,7 @@ public class TetrisBoard {
      * @param tetromino Le tetromino actuellement en cours de placement
      * @return True si en colision, false sinon
      */
-    public boolean hitTestTetrominos(Tetromino tetromino){
+    public boolean gravityTest(Tetromino tetromino, int x, int y){
         return false;
     }
 
@@ -33,10 +39,17 @@ public class TetrisBoard {
      * @param tetromino Le tetromino actuel
      * @param x La composante X du prochain mouvement du tetromino
      * @param y La composante Y du prochain mouvement du tetromino
-     * @return True si le mouvement est possible, false sinon
+     * @return Bitfield => 0 si aucun mouvement possible, voir ROTATE_LEFT, ROTATE_RIGHT, TRANSLATE_LEFT, TRANSLATE_RIGHT sinon
      */
-    public boolean canGoOn(Tetromino tetromino, int x, int y){
-        return false;
+    public byte getAvailableMoves(Tetromino tetromino, int x, int y){
+        byte moves = 0;
+
+        //Si on touches un tetromino, alors y n'a plus d'espoir ...
+        if(!gravityTest(tetromino, x, y)){
+
+        }
+
+        return moves;
     }
 
     /**

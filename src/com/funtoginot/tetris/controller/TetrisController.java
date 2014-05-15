@@ -1,6 +1,7 @@
 package com.funtoginot.tetris.controller;
 
 import com.funtoginot.tetris.data.TetrisEngine;
+import com.funtoginot.tetris.view.TetrisView;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
@@ -11,6 +12,20 @@ import java.awt.event.KeyListener;
 public class TetrisController implements KeyListener {
 
     private TetrisEngine engine;
+    private TetrisView view;
+
+    public TetrisController(TetrisView view){
+        this.view = view;
+        view.addKeyListener(this);
+
+        try {
+            engine = new TetrisEngine(TetrisEngine.DEFAULT_ROWS_NUMBER, TetrisEngine.DEFAULT_COLUMNS_NUMBER);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        engine.addObserver(view);
+    }
 
     /**
      * Méthode de traitement pour la mise en pause du jeu
@@ -29,14 +44,14 @@ public class TetrisController implements KeyListener {
     }
 
     @Override
-    public void keyTyped(KeyEvent e) {
-        if(isValidKeyboardInput(e.getKeyCode())) {
-            engine.handleKeyPressed(e.getKeyCode());
-        }
-    }
+    public void keyTyped(KeyEvent e) {}
 
     @Override
-    public void keyPressed(KeyEvent e) {}
+    public void keyPressed(KeyEvent e) {
+        if(isValidKeyboardInput(e.getKeyCode())) {
+            view.drawTetromino(engine.handleKeyPressed(e.getKeyCode()));
+        }
+    }
 
     @Override
     public void keyReleased(KeyEvent e) {}
@@ -50,6 +65,7 @@ public class TetrisController implements KeyListener {
         return keycode == KeyEvent.VK_SPACE
                 || keycode == KeyEvent.VK_DOWN
                 || keycode == KeyEvent.VK_RIGHT
-                || keycode == KeyEvent.VK_LEFT;
+                || keycode == KeyEvent.VK_LEFT
+                || keycode == KeyEvent.VK_UP;
     }
 }

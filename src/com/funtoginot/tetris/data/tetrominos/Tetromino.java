@@ -29,7 +29,7 @@ public class Tetromino {
     public void rotateLeft(){
         int n = matrix.length;
         for (int i = 0; i < n >> 1; i++) {
-            for (int j =i; j< n - 1 - i; j++) {
+            for (int j = i; j< n - 1 - i; j++) {
                 byte tmp = matrix[i][j];
                 matrix[i][j] = matrix[j][n - 1 - i];
                 matrix[j][n - 1 - i] = matrix[n - 1 - i][n - 1 - j];
@@ -65,9 +65,6 @@ public class Tetromino {
     public boolean hasSquareAt(int x, int y){
         assert(x > TETROMINO_SQUARE_WIDTH - 1 || y > TETROMINO_SQUARE_WIDTH -1): "Impossible de vérifier la présence d'un cube dans le tetromino à la position : " + x + "," + y;
 
-        //On calcul le décalage x * matrix width + y
-
-        //On test si après décalage le premier bit est à 1
         return matrix[x][y] == 1;
     }
 
@@ -85,6 +82,14 @@ public class Tetromino {
      */
     public int getHeight(){
         return matrix[0].length;
+    }
+
+    /**
+     * Renvoie la couleur du tetromino
+     * @return Couleur du tetromino
+     */
+    public Color getColor() {
+        return color;
     }
 
     @Override

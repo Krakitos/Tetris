@@ -78,17 +78,36 @@ public class TetrisView extends JFrame implements TetrisObserver {
 
     @Override
     public void onCurrentTetrominoChanged(TetrisEngine.MovementSequence current, Tetromino tetromino) {
-
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                //TODO : Impl
+            }
+        });
     }
 
     @Override
-    public void onFullRowsDeleted(int[] rows) {
-
+    public void onFullRowsDeleted(final int[] rows) {
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                boardPane.deleteRow(rows);
+            }
+        });
     }
 
     @Override
-    public void onTimerTick(int delay, TetrisEngine.MovementSequence current) {
-        System.out.println("Tak");
+    public void onTimerTick(int delay, final TetrisEngine.MovementSequence current) {
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                boardPane.drawTetromino(current);
+            }
+        });
+    }
+
+    public void drawTetromino(final TetrisEngine.MovementSequence sequence){
+        boardPane.drawTetromino(sequence);
     }
 
     @Override
