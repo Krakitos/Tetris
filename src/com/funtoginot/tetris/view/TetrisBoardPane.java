@@ -31,7 +31,7 @@ public class TetrisBoardPane extends JPanel {
         }
     }
 
-    /*public void drawTetromino(TetrisEngine.MovementSequence sequence){
+    public void drawTetromino(TetrisEngine.MovementSequence sequence){
         //Mise à jour du tetromino
         for (int i = 0; i < sequence.getWorkingTetromino().getWidth(); i++) {
             for (int j = 0; j < sequence.getWorkingTetromino().getHeight(); j++) {
@@ -42,7 +42,7 @@ public class TetrisBoardPane extends JPanel {
                 }
             }
         }
-    }*/
+    }
 
     /**
      * Supprime les lignes du plateau
@@ -78,14 +78,5 @@ public class TetrisBoardPane extends JPanel {
      */
     private boolean inside(int x, int y, TetrisEngine.MovementSequence tetromino){
         return false;
-    }
-
-    public void drawTetromino(TetrisEngine.MovementSequence sequence){
-        for (int i = 0; i < GRID_ROWS; i++) {
-            for (int j = 0; j < GRID_COLS; j++) {
-                Cell cell = (Cell) getComponent(i * GRID_COLS + j);
-                cell.setBackground(new Color((int) (Math.random() * 255), (int) (Math.random() * 255), (int) (Math.random() * 255)));
-            }
-        }
     }
 }
