@@ -94,9 +94,7 @@ public class TetrisLayout implements LayoutManager2 {
 
         int cellSize = gridSize / Math.max(rowCount, columnCount);
 
-        //int xOffset = (width - (cellSize * columnCount)) / 2;
         int xOffset = 0;
-        //int yOffset = (height - (cellSize * rowCount)) / 2;
         int yOffset = 0;
 
         Map<Integer, List<CellGrid.Cell>> cellRows = grid.getCellRows();

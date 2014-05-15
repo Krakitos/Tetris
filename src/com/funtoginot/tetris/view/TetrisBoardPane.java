@@ -13,12 +13,13 @@ import java.awt.*;
 public class TetrisBoardPane extends JPanel {
     private static final int GRID_ROWS = 22;
     private static final int GRID_COLS = 10;
-    private static final Color DEFAULT_COLOR = Color.WHITE;
+    private static final Color DEFAULT_COLOR = Color.BLACK;
 
 
     public TetrisBoardPane() {
         int index = 0;
         setLayout(new TetrisLayout(GRID_ROWS,GRID_COLS));
+        setBorder(BorderFactory.createLineBorder(Color.CYAN, 5));
         for (int row = 0; row < GRID_ROWS; row++) {
             for (int col = 0; col < GRID_COLS; col++) {
                 Color color = DEFAULT_COLOR;
