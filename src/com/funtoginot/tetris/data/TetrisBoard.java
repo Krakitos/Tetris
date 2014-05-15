@@ -2,6 +2,9 @@ package com.funtoginot.tetris.data;
 
 import com.funtoginot.tetris.data.tetrominos.Tetromino;
 
+import java.awt.*;
+import java.util.Arrays;
+
 /**
  * Created by Morgan on 14/05/2014.
  */
@@ -31,6 +34,20 @@ public class TetrisBoard {
      * @return True si en colision, false sinon
      */
     public boolean gravityTest(Tetromino tetromino, int x, int y){
+        //Calcul du point le plus éloigné du point d'origine de la piece (haut gauche).
+        Point bottomRight = new Point(x + tetromino.getWidth(), y + tetromino.getHeight());
+
+        //Gestion des sorties de plateau
+        if(bottomRight.x < width && bottomRight.y < height){
+            //Vérification de la colision avec un autre tetromino
+            byte availableMoves = getAvailableMoves(tetromino, x, y);
+
+            //Si la descente est possible, alors la chute peut continuer
+            if((availableMoves & TRANSLATE_BOTTOM) != 0){
+                return true;
+            }
+        }
+
         return false;
     }
 
@@ -42,26 +59,59 @@ public class TetrisBoard {
      * @return Bitfield => 0 si aucun mouvement possible, voir ROTATE_LEFT, ROTATE_RIGHT, TRANSLATE_LEFT, TRANSLATE_RIGHT sinon
      */
     public byte getAvailableMoves(Tetromino tetromino, int x, int y){
-        byte moves = 0;
+        byte moves = TRANSLATE_BOTTOM;
 
-        //Si on touches un tetromino, alors y n'a plus d'espoir ...
-        if(!gravityTest(tetromino, x, y)){
 
-        }
+
 
         return moves;
     }
 
     /**
-     * Détermine les lignes complètement remplies et les supprime
+     * Détermine les lignes complètement remplies et les supprime.
+     * Cette méthode par du bas du plateau de jeu pour remonter au fur et a mesure. Les blocs étant empilés de bas en
+     * haut, procéder de cette manière permet d'éviter de traverser un bon nombre de lignes qui ne sont potentiellement
+     * pas rempli
      * @return Renvoie un tableau avec les lignes complètement remplies supprimées, ou null si aucune ne l'a été
      */
     public int[] deleteRowsFull(){
-        return null;
+
+        //Vide
+        int[] rows = new int[0];
+
+        for (int i = grid.length - 1; i >= 0; --i) {
+            for (int j = 0; j < grid[i].length; j++) {
+                //Si la valeur de la case est 0 (valeur par défaut), cette ligne n'st pas complète
+                if(grid[i][j] == 0){
+                    continue;
+                }
+
+                //Si on arrive ici, c'est que l'on a eu une ligne complete, on peut l'ajouter
+                int index = rows.length;
+
+                //Augmente la capacité du tableau de 1
+                rows = Arrays.copyOf(rows, index + 1);
+
+                //Stocke la ligne
+                rows[index] = j;
+            }
+        }
+
+        return rows;
     }
 
     public void mergeTetromino(TetrisEngine.MovementSequence tetromino){
+        for (int i = 0; i < tetromino.getWorkingTetromino().getWidth(); i++) {
+            for (int j = 0; j < tetromino.getWorkingTetromino().getHeight(); j++) {
 
+                //Si un carré est défini à cette position dans la matrice
+                if(tetromino.getWorkingTetromino().hasSquareAt(i, j)){
+
+                    //On attribut la couleur
+                    grid[tetromino.getRow() + i][tetromino.getColumn() + j] = tetromino.getWorkingTetromino().getColor().getRGB();
+                }
+            }
+        }
     }
 
     public int getColorAt(int x, int y){
@@ -74,13 +124,5 @@ public class TetrisBoard {
 
     public int getHeight() {
         return height;
-    }
-
-    /**
-     * Supprime une ligne dans la
-     * @param row
-     */
-    private void removeRow(int row){
-
     }
 }
