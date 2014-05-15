@@ -1,5 +1,6 @@
 package com.funtoginot.tetris.view;
 
+import com.funtoginot.tetris.data.TetrisEngine;
 import com.funtoginot.tetris.view.cell.Cell;
 import com.funtoginot.tetris.view.layout.TetrisLayout;
 
@@ -11,8 +12,8 @@ import java.awt.*;
  */
 
 public class TetrisBoardPane extends JPanel {
-    private static final int GRID_ROWS = 22;
-    private static final int GRID_COLS = 10;
+    public static final int GRID_ROWS = TetrisEngine.DEFAULT_ROWS_NUMBER;
+    public static final int GRID_COLS = TetrisEngine.DEFAULT_COLUMNS_NUMBER;
     private static final Color DEFAULT_COLOR = Color.BLACK;
 
 

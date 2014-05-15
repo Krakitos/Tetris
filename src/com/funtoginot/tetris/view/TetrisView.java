@@ -6,6 +6,7 @@ import com.funtoginot.tetris.data.tetrominos.Tetromino;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.KeyListener;
 
 /**
  * Created by Morgan on 14/05/2014.
@@ -16,6 +17,8 @@ public class TetrisView extends JFrame implements TetrisObserver {
     public static final int DEFAULT_HEIGHT = 200;
 
     private static final String TITLE = "Tetris";
+
+    private TetrisBoardPane boardPane;
 
     public TetrisView(){
         configureWindow();
@@ -58,17 +61,23 @@ public class TetrisView extends JFrame implements TetrisObserver {
         Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
         frame.setLocation(((int) (screen.getWidth() - getWidth()) / 2), ((int) (screen.getHeight() - getHeight()) / 2));*/
 
+        boardPane = new TetrisBoardPane();
         /* Set default close action */
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.add(new TetrisBoardPane());
+        frame.add(boardPane);
         frame.add(new JLabel("Hello"), BorderLayout.EAST);
         frame.pack();
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
     }
 
+    public void addKeyListener(KeyListener listener){
+        boardPane.setFocusable(true);
+        boardPane.addKeyListener(listener);
+    }
+
     @Override
-    public void onCurrentTetrominoChanged(Tetromino tetromino) {
+    public void onCurrentTetrominoChanged(TetrisEngine.MovementSequence current, Tetromino tetromino) {
 
     }
 
@@ -79,7 +88,7 @@ public class TetrisView extends JFrame implements TetrisObserver {
 
     @Override
     public void onTimerTick(int delay, TetrisEngine.MovementSequence current) {
-
+        System.out.println("Tak");
     }
 
     @Override
@@ -88,7 +97,7 @@ public class TetrisView extends JFrame implements TetrisObserver {
     }
 
     @Override
-    public void onGameStarted(Tetromino current, Tetromino next) {
+    public void onGameStarted(TetrisEngine.MovementSequence current, Tetromino next) {
 
     }
 
