@@ -39,6 +39,27 @@ public abstract class TetrisObservable {
         observers.clear();
     }
 
+
+    /**
+     * Informe les observateur du démarrage d'une partie
+     * @param current Le tetromino actuellement en cours de placement
+     * @param next Le prochain tetromino à placer
+     */
+    protected void fireGameStarted(Tetromino current, Tetromino next){
+        for(TetrisObserver observer : observers){
+            observer.onGameStarted(current, next);
+        }
+    }
+
+    /**
+     * Informe les observateurs de la mise en pause du jeu
+     */
+    protected void fireGamePaused(){
+        for(TetrisObserver observer : observers){
+            observer.onGamePaused();
+        }
+    }
+
     /**
      * Informe du changement de tetromino à placer
      * @param tetromino Tetromino à placer

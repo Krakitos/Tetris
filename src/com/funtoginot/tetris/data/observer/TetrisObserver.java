@@ -33,4 +33,16 @@ public interface TetrisObserver {
      * @param points Le nombre de points actuel
      */
     public void onPointsChanged(int points);
+
+    /**
+     * Indique le début d'une partie
+     * @param current Le tetromino actuellement en cours de placement
+     * @param next Le prochain tetromino
+     */
+    public void onGameStarted(Tetromino current, Tetromino next);
+
+    /**
+     * Indique que le jeu à été mis en pause
+     */
+    public void onGamePaused();
 }
