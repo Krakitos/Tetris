@@ -1,6 +1,7 @@
 package com.funtoginot.tetris.view;
 
-import com.funtoginot.tetris.data.observer.TetrisObserver;
+import com.funtoginot.tetris.data.TetrisEngine;
+import com.funtoginot.tetris.data.observers.TetrisObserver;
 import com.funtoginot.tetris.data.tetrominos.Tetromino;
 
 import javax.swing.*;
@@ -11,8 +12,10 @@ import java.awt.*;
  */
 public class TetrisView extends JFrame implements TetrisObserver {
 
-    public static final int DEFAULT_WIDTH = 500;
-    public static final int DEFAULT_HEIGHT = 700;
+    public static final int DEFAULT_WIDTH = 100;
+    public static final int DEFAULT_HEIGHT = 200;
+
+    private static final String TITLE = "Tetris";
 
     public TetrisView(){
         configureWindow();
@@ -26,21 +29,42 @@ public class TetrisView extends JFrame implements TetrisObserver {
             e.printStackTrace();
         }
 
-        /* Set window size */
-        setSize(DEFAULT_WIDTH, DEFAULT_HEIGHT);
+        /* Show window */
+        JFrame frame = new JFrame(TITLE);
 
-        /* Center the window */
+        /* Add Menu */
+        JMenuBar menuBar = new JMenuBar();
+
+        JMenu menu1 = new JMenu("Quitter");
+
+        JMenuItem quitter = new JMenuItem();
+        menu1.add(quitter);
+
+        menuBar.add(menu1);
+
+        JMenu menu2 = new JMenu("?");
+
+        JMenuItem aPropos = new JMenuItem();
+        menu2.add(aPropos);
+
+        menuBar.add(menu2);
+
+        frame.setJMenuBar(menuBar);
+
+        /* Set window size */
+        frame.setSize(DEFAULT_WIDTH, DEFAULT_HEIGHT);
+
+        /* Center the window
         Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
-        setLocation(((int)(screen.getWidth() - getWidth())/2), ((int)(screen.getHeight() - getHeight())/2));
+        frame.setLocation(((int) (screen.getWidth() - getWidth()) / 2), ((int) (screen.getHeight() - getHeight()) / 2));*/
 
         /* Set default close action */
-        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-
-        /* Set layout manager */
-        setLayout(new BorderLayout());
-
-        /* Show window */
-        setVisible(true);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.add(new TetrisBoardPane());
+        frame.add(new JLabel("Hello"), BorderLayout.EAST);
+        frame.pack();
+        frame.setLocationRelativeTo(null);
+        frame.setVisible(true);
     }
 
     @Override
@@ -54,12 +78,27 @@ public class TetrisView extends JFrame implements TetrisObserver {
     }
 
     @Override
-    public void onTimerTick(int delay, Tetromino current) {
+    public void onTimerTick(int delay, TetrisEngine.MovementSequence current) {
 
     }
 
     @Override
     public void onPointsChanged(int points) {
+
+    }
+
+    @Override
+    public void onGameStarted(Tetromino current, Tetromino next) {
+
+    }
+
+    @Override
+    public void onGamePaused() {
+
+    }
+
+    @Override
+    public void onGameUnPaused() {
 
     }
 }
