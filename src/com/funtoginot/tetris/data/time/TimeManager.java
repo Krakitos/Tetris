@@ -24,6 +24,7 @@ public class TimeManager {
     public TimeManager(int tick){
         listeners = new LinkedList<>();
         timer = new Timer("Time manager");
+        this.tick = tick;
     }
 
     /**
