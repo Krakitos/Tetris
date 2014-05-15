@@ -56,6 +56,9 @@ public class TetrisEngine extends TetrisObservable implements TickListener {
 
         gameboard = new TetrisBoard(rows, columns);
 
+        timeManager = new TimeManager(DEFAULT_TIMER_TICK);
+        timeManager.addTickListener(this);
+
         isRunning = new AtomicBoolean(false);
         isPaused = new AtomicBoolean(false);
 
@@ -93,7 +96,42 @@ public class TetrisEngine extends TetrisObservable implements TickListener {
 
     @Override
     public void update(int tick) {
+        //Si la mise à jour à entrainer la fin du mouvement (collision)
+        if(sequence.update()){
+            //On place la piece sur le plateau
+            gameboard.mergeTetromino(sequence);
 
+            //On verifie les lignes pleines
+            int[] fullLines = gameboard.deleteRowsFull();
+
+            //Si on a des lignes pleines
+            if(fullLines.length > 0) {
+
+                //On augmente les points de 100 * le nombre de lignes pleines ce tour ci
+                points = 100 * fullLines.length;
+
+                //On informe la vue qu'il faut supprimer des lignes
+                fireRowFull(fullLines);
+
+                //On informe la vue que le score à changer
+                firePointsChanged(points);
+
+                //Le tetromino actuel devient l'ancien suivant
+                current = next;
+
+                //Le suivant est crée aléatoirement
+                next = tetrominosFactory.getTetromino();
+
+                //On démarre une nouvelle séquence
+                sequence.newSequence(current);
+
+                //On informe la vue que le tetromino courant a changé
+                fireCurrentTetrominoChanged(sequence, next);
+            }
+        }else {
+            System.out.println("Tick");
+            fireTimerTick(tick, sequence);
+        }
     }
 
 
@@ -172,7 +210,9 @@ public class TetrisEngine extends TetrisObservable implements TickListener {
         /**
          * Met à jour la position du tetromino
          */
-        public void update() {
+        public boolean update() {
+            boolean isLastMove = false;
+
             switch(lastKeyPressed) {
                 case KeyEvent.VK_DOWN : {
 
@@ -191,6 +231,8 @@ public class TetrisEngine extends TetrisObservable implements TickListener {
                     break;
                 }
             }
+
+            return isLastMove;
         }
     }
 }

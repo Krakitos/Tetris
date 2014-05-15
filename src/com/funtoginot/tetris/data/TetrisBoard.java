@@ -1,9 +1,6 @@
 package com.funtoginot.tetris.data;
 
-import com.funtoginot.tetris.data.observer.TetrisObservable;
 import com.funtoginot.tetris.data.tetrominos.Tetromino;
-
-import java.awt.*;
 
 /**
  * Created by Morgan on 14/05/2014.
@@ -50,7 +47,7 @@ public class TetrisBoard {
         return null;
     }
 
-    public void mergeTetromino(Tetromino tetromino){
+    public void mergeTetromino(TetrisEngine.MovementSequence tetromino){
 
     }
 

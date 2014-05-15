@@ -46,7 +46,7 @@ public abstract class TetrisObservable {
      * @param current Le tetromino actuellement en cours de placement
      * @param next Le prochain tetromino à placer
      */
-    protected void fireGameStarted(Tetromino current, Tetromino next){
+    protected void fireGameStarted(TetrisEngine.MovementSequence current, Tetromino next){
         for(TetrisObserver observer : observers){
             observer.onGameStarted(current, next);
         }
@@ -72,11 +72,11 @@ public abstract class TetrisObservable {
 
     /**
      * Informe du changement de tetromino à placer
-     * @param tetromino Tetromino à placer
+     * @param current Tetromino à placer
      */
-    protected void fireCurrentTetrominoChanged(Tetromino tetromino){
+    protected void fireCurrentTetrominoChanged(TetrisEngine.MovementSequence current, Tetromino next){
         for(TetrisObserver observer : observers){
-            observer.onCurrentTetrominoChanged(tetromino);
+            observer.onCurrentTetrominoChanged(current, next);
         }
     }
 

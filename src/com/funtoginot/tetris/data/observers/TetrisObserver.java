@@ -11,9 +11,10 @@ public interface TetrisObserver {
 
     /**
      * Indique un changement du tetromino à placer
-     * @param tetromino Le nouveau tetromino à placer
+     * @param current Le nouveau tetromino à placer
+     * @param tetromino Le prochain tetromino
      */
-    public void onCurrentTetrominoChanged(Tetromino tetromino);
+    public void onCurrentTetrominoChanged(TetrisEngine.MovementSequence current, Tetromino tetromino);
 
     /**
      * Indique qu'une ou plusieurs lignes sont complètement remplies
@@ -40,7 +41,7 @@ public interface TetrisObserver {
      * @param current Le tetromino actuellement en cours de placement
      * @param next Le prochain tetromino
      */
-    public void onGameStarted(Tetromino current, Tetromino next);
+    public void onGameStarted(TetrisEngine.MovementSequence current, Tetromino next);
 
     /**
      * Indique que le jeu à été mis en pause
