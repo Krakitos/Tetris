@@ -31,6 +31,8 @@ public class TetrisEngine extends TetrisObservable implements TickListener {
 
     private TetrisBoard gameboard;
 
+    private MovementSequence sequence;
+
     private int points;
 
     /**
@@ -56,6 +58,8 @@ public class TetrisEngine extends TetrisObservable implements TickListener {
 
         isRunning = new AtomicBoolean(false);
         isPaused = new AtomicBoolean(false);
+
+        sequence = new MovementSequence();
     }
 
     /**
@@ -63,6 +67,10 @@ public class TetrisEngine extends TetrisObservable implements TickListener {
      */
     public void startGame(){
         isRunning.set(true);
+
+        initPlaySequence();
+
+        timeManager.run();
     }
 
     /**
@@ -90,11 +98,11 @@ public class TetrisEngine extends TetrisObservable implements TickListener {
 
 
     /**
-     * défini cette touche comme le dernier évènement clavier. Une seule opération de mouvement est possible en un tick
+     * Défini cette touche comme le dernier évènement clavier. Une seule opération de mouvement est possible en un tick
      * @param keycode Le code de la touche pressée
      */
     public void handleKeyPressed(int keycode){
-
+        sequence.lastKeyPressed = keycode;
     }
 
     /**
@@ -121,8 +129,21 @@ public class TetrisEngine extends TetrisObservable implements TickListener {
         return isPaused.get();
     }
 
+    /**
+     * Initialize le jeu
+     */
+    private void initPlaySequence() {
+        current = tetrominosFactory.getTetromino();
+        next = tetrominosFactory.getTetromino();
 
-    private class TetrominoPlacementSequence {
+        sequence.newSequence(current);
+    }
+
+
+    /**
+     * Classe gérant toute la partie spatiale du tetromino en cours de placement
+     */
+    public class MovementSequence {
 
         private Tetromino workingTetromino;
         private int x;
@@ -130,18 +151,27 @@ public class TetrisEngine extends TetrisObservable implements TickListener {
 
         private int lastKeyPressed;
 
-        private TetrominoPlacementSequence(Tetromino tetromino){
-
-        }
-
+        /**
+         * Renvoi le tetromino en cours de placement
+         * @return Tetromino en cours de placement
+         */
         public Tetromino getWorkingTetromino() {
             return workingTetromino;
         }
 
-        public void setWorkingTetromino(Tetromino workingTetromino) {
-            this.workingTetromino = workingTetromino;
+        /**
+         * Démarre une nouvelle séquence de placement
+         * @param newTetromino
+         */
+        public void newSequence(Tetromino newTetromino){
+            workingTetromino = newTetromino;
+            x = (int)(Math.random() * (gameboard.getWidth() - workingTetromino.getWidth()));
+            y = 0;
         }
 
+        /**
+         * Met à jour la position du tetromino
+         */
         public void update() {
             switch(lastKeyPressed) {
                 case KeyEvent.VK_DOWN : {

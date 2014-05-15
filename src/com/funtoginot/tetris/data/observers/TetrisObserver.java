@@ -1,5 +1,6 @@
-package com.funtoginot.tetris.data.observer;
+package com.funtoginot.tetris.data.observers;
 
+import com.funtoginot.tetris.data.TetrisEngine;
 import com.funtoginot.tetris.data.tetrominos.Tetromino;
 
 /**
@@ -26,7 +27,7 @@ public interface TetrisObserver {
      * @param delay Le temps écoulé depuis le dernier tick
      * @param current Le tetromino actuellement en cours de placement
      */
-    public void onTimerTick(int delay, Tetromino current);
+    public void onTimerTick(int delay, TetrisEngine.MovementSequence current);
 
     /**
      * Indique un changement dans le nombre de points
@@ -45,4 +46,9 @@ public interface TetrisObserver {
      * Indique que le jeu à été mis en pause
      */
     public void onGamePaused();
+
+    /**
+     * Indique que le jeu à repris
+     */
+    public void onGameUnPaused();
 }

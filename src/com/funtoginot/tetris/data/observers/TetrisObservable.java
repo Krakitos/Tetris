@@ -1,5 +1,6 @@
-package com.funtoginot.tetris.data.observer;
+package com.funtoginot.tetris.data.observers;
 
+import com.funtoginot.tetris.data.TetrisEngine;
 import com.funtoginot.tetris.data.tetrominos.Tetromino;
 
 import java.util.LinkedList;
@@ -61,6 +62,15 @@ public abstract class TetrisObservable {
     }
 
     /**
+     * Informe les observateurs que le jeu à repris
+     */
+    protected void fireGameUnPaused(){
+        for(TetrisObserver observer : observers){
+            observer.onGameUnPaused();
+        }
+    }
+
+    /**
      * Informe du changement de tetromino à placer
      * @param tetromino Tetromino à placer
      */
@@ -86,7 +96,7 @@ public abstract class TetrisObservable {
      * @param delay L'interval de temps entre chaque tick
      * @param current Le tetromino actuellement en cours de placement
      */
-    protected void fireTimerTick(int delay, Tetromino current){
+    protected void fireTimerTick(int delay, TetrisEngine.MovementSequence current){
         for(TetrisObserver observer : observers){
             observer.onTimerTick(delay, current);
         }
