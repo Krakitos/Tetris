@@ -212,15 +212,12 @@ public class TetrisEngine extends TetrisObservable implements TickListener {
         public boolean update() {
             availableMoves = gameboard.getAvailableMoves(workingTetromino, row, column);
 
-            //Si on ne peut pas aller plus loin, on drop la piece
             if((availableMoves & TetrisBoard.TRANSLATE_BOTTOM) != 0){
                 ++row;
+                return false;
             }else{
-
+                return true;
             }
-
-            //Si aucun mouvement n'est disponible...
-            return availableMoves == 0;
         }
 
         public void handleKeyboardEvent(int keycode){
