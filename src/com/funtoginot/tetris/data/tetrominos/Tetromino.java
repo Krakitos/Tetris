@@ -71,6 +71,22 @@ public class Tetromino {
         return matrix[x][y] == 1;
     }
 
+    /**
+     * Largeur du Tetromino
+     * @return La largeur du tetromino
+     */
+    public int getWidth(){
+        return matrix.length;
+    }
+
+    /**
+     * Hauteur du tetromino
+     * @return La hauteur du tetromino
+     */
+    public int getHeight(){
+        return matrix[0].length;
+    }
+
     @Override
     public String toString() {
         String printM = "";
