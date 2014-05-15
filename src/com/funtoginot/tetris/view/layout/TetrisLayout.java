@@ -98,8 +98,7 @@ public class TetrisLayout implements LayoutManager2 {
         int yOffset = 0;
 
         Map<Integer, List<CellGrid.Cell>> cellRows = grid.getCellRows();
-        for (Integer row : cellRows.keySet()) {
-            List<CellGrid.Cell> rows = cellRows.get(row);
+        for (List<CellGrid.Cell> rows : cellRows.values()) {
             for (CellGrid.Cell cell : rows) {
                 Point p = cell.getPoint();
                 Component comp = cell.getComponent();

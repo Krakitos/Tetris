@@ -21,9 +21,9 @@ public class CellGrid {
     public CellGrid(Map<Point, Component> mapComps) {
         mapRows = new HashMap<>(25);
         mapCols = new HashMap<>(25);
-        for (Point p : mapComps.keySet()) {
-            int row = p.y;
-            int col = p.x;
+        for (Map.Entry<Point, Component> entry : mapComps.entrySet()) {
+            int row = entry.getKey().y;
+            int col = entry.getKey().x;
             List<Cell> rows = mapRows.get(row);
             List<Cell> cols = mapCols.get(col);
             if (rows == null) {
@@ -34,7 +34,7 @@ public class CellGrid {
                 cols = new ArrayList<>(25);
                 mapCols.put(col, cols);
             }
-            Cell cell = new Cell(p, mapComps.get(p));
+            Cell cell = new Cell(entry.getKey(), entry.getValue());
             rows.add(cell);
             cols.add(cell);
         }
@@ -86,7 +86,7 @@ public class CellGrid {
         return cellWidth;
     }
 
-    public class Cell {
+    public static class Cell {
 
         private Point point;
         private Component component;
