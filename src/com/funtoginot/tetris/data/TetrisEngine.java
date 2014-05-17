@@ -166,6 +166,11 @@ public class TetrisEngine extends TetrisObservable implements TickListener {
         return isPaused.get();
     }
 
+    public TetrisBoard getBoard(){
+        return gameboard;
+    }
+
+
     /**
      * Initialize le jeu
      */
@@ -175,6 +180,7 @@ public class TetrisEngine extends TetrisObservable implements TickListener {
 
         sequence.newSequence(current);
     }
+
 
 
     /**

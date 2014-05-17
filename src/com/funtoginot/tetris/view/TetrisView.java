@@ -20,11 +20,11 @@ public class TetrisView extends JFrame implements TetrisObserver {
 
     private TetrisBoardPane boardPane;
 
-    public TetrisView(){
-        configureWindow();
+    public TetrisView(TetrisEngine model){
+        configureWindow(model);
     }
 
-    private void configureWindow() {
+    private void configureWindow(TetrisEngine model) {
 
         try {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
@@ -61,7 +61,7 @@ public class TetrisView extends JFrame implements TetrisObserver {
         Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
         frame.setLocation(((int) (screen.getWidth() - getWidth()) / 2), ((int) (screen.getHeight() - getHeight()) / 2));*/
 
-        boardPane = new TetrisBoardPane();
+        boardPane = new TetrisBoardPane(model);
         /* Set default close action */
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.add(boardPane);

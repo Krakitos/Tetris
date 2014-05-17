@@ -19,13 +19,13 @@ public class TetrisBoard {
     private final int width;
     private final int height;
 
-    private int[][] grid;
+    private Color[][] grid;
 
     public TetrisBoard(int defaultRowsNumber, int defaultColumnsNumber){
         width = defaultRowsNumber;
         height = defaultColumnsNumber;
 
-        grid = new int[width][height];
+        initGrid();
     }
 
     /**
@@ -82,7 +82,7 @@ public class TetrisBoard {
         for (int i = grid.length - 1; i >= 0; --i) {
             for (int j = 0; j < grid[i].length; j++) {
                 //Si la valeur de la case est 0 (valeur par défaut), cette ligne n'st pas complète
-                if(grid[i][j] == 0){
+                if(grid[i][j] == Color.BLACK){
                     continue;
                 }
 
@@ -108,13 +108,21 @@ public class TetrisBoard {
                 if(tetromino.getWorkingTetromino().hasSquareAt(i, j)){
 
                     //On attribut la couleur
-                    grid[tetromino.getRow() + i][tetromino.getColumn() + j] = tetromino.getWorkingTetromino().getColor().getRGB();
+                    grid[tetromino.getRow() + i][tetromino.getColumn() + j] = tetromino.getWorkingTetromino().getColor();
                 }
             }
         }
     }
 
-    public int getColorAt(int x, int y){
+    private void initGrid(){
+        grid = new Color[width][height];
+        for(Color[] rows : grid){
+            Arrays.fill(rows, Color.BLACK);
+        }
+
+    }
+
+    public Color getColorAt(int x, int y){
         return grid[x][y];
     }
 

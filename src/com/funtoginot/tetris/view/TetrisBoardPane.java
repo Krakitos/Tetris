@@ -1,5 +1,6 @@
 package com.funtoginot.tetris.view;
 
+import com.funtoginot.tetris.data.TetrisBoard;
 import com.funtoginot.tetris.data.TetrisEngine;
 import com.funtoginot.tetris.view.cell.Cell;
 import com.funtoginot.tetris.view.layout.TetrisLayout;
@@ -15,10 +16,16 @@ public class TetrisBoardPane extends JPanel {
 
     public static final int GRID_ROWS = TetrisEngine.DEFAULT_ROWS_NUMBER;
     public static final int GRID_COLS = TetrisEngine.DEFAULT_COLUMNS_NUMBER;
+
     private static final Color DEFAULT_COLOR = Color.BLACK;
 
+    private final TetrisEngine model;
 
-    public TetrisBoardPane() {
+
+    public TetrisBoardPane(TetrisEngine board) {
+
+        model = board;
+
         int index = 0;
         setLayout(new TetrisLayout(GRID_ROWS, GRID_COLS));
         for (int row = 0; row < GRID_ROWS; row++) {
@@ -32,6 +39,9 @@ public class TetrisBoardPane extends JPanel {
     }
 
     public void drawTetromino(TetrisEngine.MovementSequence sequence){
+
+        refreshBoardView();
+
         //Mise à jour du tetromino
         for (int i = 0; i < sequence.getWorkingTetromino().getWidth(); i++) {
             for (int j = 0; j < sequence.getWorkingTetromino().getHeight(); j++) {
@@ -78,5 +88,20 @@ public class TetrisBoardPane extends JPanel {
      */
     private boolean inside(int x, int y, TetrisEngine.MovementSequence tetromino){
         return false;
+    }
+
+    /**
+     * Met à jour l'affichage en fonction du model sans tenir compte du tetromino en cours de placement
+     */
+    private void refreshBoardView(){
+        int width = model.getBoard().getWidth();
+        int height = model.getBoard().getHeight();
+
+        for (int i = 0; i < width; i++) {
+            for (int j = 0; j < height; j++) {
+                Cell cell = (Cell) getComponent(i * GRID_COLS + j);
+                cell.setBackground(model.getBoard().getColorAt(i, j));
+            }
+        }
     }
 }

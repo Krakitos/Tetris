@@ -14,15 +14,16 @@ public class TetrisController implements KeyListener {
     private TetrisEngine engine;
     private TetrisView view;
 
-    public TetrisController(TetrisView view){
-        this.view = view;
-        view.addKeyListener(this);
+    public TetrisController(){
 
         try {
             engine = new TetrisEngine(TetrisEngine.DEFAULT_ROWS_NUMBER, TetrisEngine.DEFAULT_COLUMNS_NUMBER);
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+        this.view = new TetrisView(engine);
+        view.addKeyListener(this);
 
         engine.addObserver(view);
     }
