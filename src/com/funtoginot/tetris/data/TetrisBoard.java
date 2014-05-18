@@ -15,6 +15,7 @@ public class TetrisBoard {
     public static final int TRANSLATE_LEFT = 1 << 2;
     public static final int TRANSLATE_RIGHT = 1 << 3;
     public static final int TRANSLATE_BOTTOM = 1 << 4;
+    public static final int ALL_MOVES_AVAILABLE = ROTATE_LEFT + ROTATE_RIGHT + TRANSLATE_LEFT + TRANSLATE_RIGHT + TRANSLATE_BOTTOM;
 
     private final int width;
     private final int height;
@@ -42,9 +43,18 @@ public class TetrisBoard {
         Point bottomRight = new Point(x + tetromino.getWidth(), y + tetromino.getHeight());
 
         //Gestion des sorties de plateau
-        if(bottomRight.x < width && bottomRight.y < height){
+        if(bottomRight.y < height){
+
             //On est encore sur le plateau
             moves |= TRANSLATE_BOTTOM;
+        }
+
+        if(bottomRight.x < width){
+            moves |= TRANSLATE_RIGHT;
+        }
+
+        if(x > 0){
+            moves |= TRANSLATE_LEFT;
         }
 
         return moves;
