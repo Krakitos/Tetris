@@ -29,29 +29,6 @@ public class TetrisBoard {
     }
 
     /**
-     * Indique si le tetromino actuel est en contact avec un ou plusieurs autres tetrominos déjà placés
-     * @param tetromino Le tetromino actuellement en cours de placement
-     * @return True si en colision, false sinon
-     */
-    public boolean gravityTest(Tetromino tetromino, int x, int y){
-        //Calcul du point le plus éloigné du point d'origine de la piece (haut gauche).
-        Point bottomRight = new Point(x + tetromino.getWidth(), y + tetromino.getHeight());
-
-        //Gestion des sorties de plateau
-        if(bottomRight.x < width && bottomRight.y < height){
-            //Vérification de la colision avec un autre tetromino
-            byte availableMoves = getAvailableMoves(tetromino, x, y);
-
-            //Si la descente est possible, alors la chute peut continuer
-            if((availableMoves & TRANSLATE_BOTTOM) != 0){
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    /**
      * Indique si le tetromino peut continuer sa descente
      * @param tetromino Le tetromino actuel
      * @param x La composante X du prochain mouvement du tetromino
@@ -59,10 +36,16 @@ public class TetrisBoard {
      * @return Bitfield => 0 si aucun mouvement possible, voir ROTATE_LEFT, ROTATE_RIGHT, TRANSLATE_LEFT, TRANSLATE_RIGHT sinon
      */
     public byte getAvailableMoves(Tetromino tetromino, int x, int y){
-        byte moves = TRANSLATE_BOTTOM;
+        byte moves = 0;
 
+        //Calcul du point le plus éloigné du point d'origine de la piece (haut gauche).
+        Point bottomRight = new Point(x + tetromino.getWidth(), y + tetromino.getHeight());
 
-
+        //Gestion des sorties de plateau
+        if(bottomRight.x < width && bottomRight.y < height){
+            //On est encore sur le plateau
+            moves |= TRANSLATE_BOTTOM;
+        }
 
         return moves;
     }
