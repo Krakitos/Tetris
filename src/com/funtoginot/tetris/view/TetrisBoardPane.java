@@ -19,13 +19,7 @@ public class TetrisBoardPane extends JPanel {
 
     private static final Color DEFAULT_COLOR = Color.BLACK;
 
-    private final TetrisEngine model;
-
-
-    public TetrisBoardPane(TetrisEngine board) {
-
-        model = board;
-
+    public TetrisBoardPane() {
         int index = 0;
         setLayout(new TetrisLayout(GRID_ROWS, GRID_COLS));
         for (int row = 0; row < GRID_ROWS; row++) {
@@ -38,9 +32,9 @@ public class TetrisBoardPane extends JPanel {
         }
     }
 
-    public void drawTetromino(TetrisEngine.MovementSequence sequence){
+    public void update(TetrisBoard board, TetrisEngine.MovementSequence sequence){
 
-        refreshBoardView();
+        refreshBoardView(board);
 
         //Mise à jour du tetromino
         for (int i = 0; i < sequence.getWorkingTetromino().getWidth(); i++) {
@@ -93,14 +87,14 @@ public class TetrisBoardPane extends JPanel {
     /**
      * Met à jour l'affichage en fonction du model sans tenir compte du tetromino en cours de placement
      */
-    private void refreshBoardView(){
-        int width = model.getBoard().getWidth();
-        int height = model.getBoard().getHeight();
+    private void refreshBoardView(TetrisBoard board){
+        int width = board.getWidth();
+        int height = board.getHeight();
 
         for (int i = 0; i < width; i++) {
             for (int j = 0; j < height; j++) {
                 Cell cell = (Cell) getComponent(i * GRID_COLS + j);
-                cell.setBackground(model.getBoard().getColorAt(i, j));
+                cell.setBackground(board.getColorAt(i, j));
             }
         }
     }

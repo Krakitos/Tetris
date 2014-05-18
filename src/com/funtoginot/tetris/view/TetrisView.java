@@ -20,11 +20,14 @@ public class TetrisView extends JFrame implements TetrisObserver {
 
     private TetrisBoardPane boardPane;
 
+    private final TetrisEngine model;
+
     public TetrisView(TetrisEngine model){
-        configureWindow(model);
+        this.model = model;
+        configureWindow();
     }
 
-    private void configureWindow(TetrisEngine model) {
+    private void configureWindow() {
 
         try {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
@@ -61,7 +64,7 @@ public class TetrisView extends JFrame implements TetrisObserver {
         Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
         frame.setLocation(((int) (screen.getWidth() - getWidth()) / 2), ((int) (screen.getHeight() - getHeight()) / 2));*/
 
-        boardPane = new TetrisBoardPane(model);
+        boardPane = new TetrisBoardPane();
         /* Set default close action */
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.add(boardPane);
@@ -101,13 +104,13 @@ public class TetrisView extends JFrame implements TetrisObserver {
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
-                boardPane.drawTetromino(current);
+                boardPane.update(model.getBoard(), current);
             }
         });
     }
 
     public void drawTetromino(final TetrisEngine.MovementSequence sequence){
-        boardPane.drawTetromino(sequence);
+        boardPane.update(model.getBoard(), sequence);
     }
 
     @Override
