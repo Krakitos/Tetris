@@ -101,12 +101,8 @@ public class TetrisView extends JFrame implements TetrisObserver {
 
     @Override
     public void onTimerTick(int delay, final TetrisEngine.MovementSequence current) {
-        SwingUtilities.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                boardPane.update(model.getBoard(), current);
-            }
-        });
+        //Rafraichissement de la vue
+        refreshUI(current);
     }
 
     public void drawTetromino(final TetrisEngine.MovementSequence sequence){
@@ -131,5 +127,26 @@ public class TetrisView extends JFrame implements TetrisObserver {
     @Override
     public void onGameUnPaused() {
 
+    }
+
+    /**
+     * Met à jour l'affichage en prenant en compte le contexte d'exécution actuel (Quel Thread execute cette methode)
+     * La mise à jour des éléments graphiques ne pouvant se faire uniquement dans le processus d'affichage (Event Dispatching Thread)
+     * De ce fait, cette méthode demandera toujours un rafraichissement dans l'UI Thread.
+     * @param sequence Tetromino en cours de placement
+     */
+    private void refreshUI(final TetrisEngine.MovementSequence sequence){
+
+        //Si l'appel est issu du processus d'affichage, on l'exécute.
+        if(SwingUtilities.isEventDispatchThread()){
+            boardPane.update(model.getBoard(), sequence);
+        }else{ //Sinon on décharge le processus appellant de la mise à jour pour la faire dans le processus d'UI
+            SwingUtilities.invokeLater(new Runnable() {
+                @Override
+                public void run() {
+                    refreshUI(sequence);
+                }
+            });
+        }
     }
 }
