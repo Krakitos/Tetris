@@ -1,6 +1,7 @@
 package com.funtoginot.tetris.data;
 
 import com.funtoginot.tetris.data.tetrominos.Tetromino;
+import com.funtoginot.tetris.data.utils.BitfieldInteger;
 
 import java.awt.*;
 import java.util.Arrays;
@@ -37,8 +38,7 @@ public class TetrisBoard {
      * @return Bitfield => 0 si aucun mouvement possible, voir ROTATE_LEFT, ROTATE_RIGHT, TRANSLATE_LEFT, TRANSLATE_RIGHT sinon
      */
     public byte getAvailableMoves(Tetromino tetromino, int x, int y){
-        byte moves = 0;
-
+        BitfieldInteger moves = new BitfieldInteger(0);
         //Calcul du point le plus éloigné du point d'origine de la piece (haut gauche).
         Point bottomRight = new Point(x + tetromino.getWidth(), y + tetromino.getHeight());
 
@@ -46,18 +46,24 @@ public class TetrisBoard {
         if(bottomRight.y < height){
 
             //On est encore sur le plateau
-            moves |= TRANSLATE_BOTTOM;
+            moves.setBit(TRANSLATE_BOTTOM);
         }
 
         if(bottomRight.x < width){
-            moves |= TRANSLATE_RIGHT;
+            moves.setBit(TRANSLATE_RIGHT);
         }
 
         if(x > 0){
-            moves |= TRANSLATE_LEFT;
+            moves.setBit(TRANSLATE_LEFT);
         }
 
-        return moves;
+        hitTestTetrominos(tetromino, x, y, moves);
+
+        return moves.getByte();
+    }
+
+    private void hitTestTetrominos(Tetromino tetromino, int x, int y, BitfieldInteger moves) {
+
     }
 
     /**
