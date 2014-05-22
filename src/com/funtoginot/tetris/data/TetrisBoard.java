@@ -40,23 +40,22 @@ public class TetrisBoard {
         byte moves = 0;
 
         //Calcul du point le plus éloigné du point d'origine de la piece (haut gauche).
-        Point bottomRight = new Point(x + tetromino.getHeight(), y + tetromino.getWidth());
+        Point bottomRight = new Point(x + tetromino.getWidth(), y + tetromino.getHeight());
 
         //Gestion des sorties de plateau
-        if(bottomRight.x < width){
+        if(bottomRight.y < height){
+
             //On est encore sur le plateau
             moves |= TRANSLATE_BOTTOM;
         }
 
-        if(bottomRight.y < height){
+        if(bottomRight.x < width){
             moves |= TRANSLATE_RIGHT;
         }
 
-        if(y > 0){
+        if(x > 0){
             moves |= TRANSLATE_LEFT;
         }
-
-       hitTestOtherTetromino(tetromino, x, y, moves);
 
         return moves;
     }
@@ -108,35 +107,12 @@ public class TetrisBoard {
         }
     }
 
-    /**
-     * Initialise la grille de jeu
-     */
     private void initGrid(){
         grid = new Color[width][height];
         for(Color[] rows : grid){
             Arrays.fill(rows, Color.BLACK);
         }
 
-    }
-
-    /**
-     * Détermine si le tetromino est en contact avec d'autre tetromino sur la grille
-     * @param tetromino Le tetromino actuel
-     * @param x
-     * @param y
-     * @param moves
-     * @return True si en contact, false sinon
-     */
-    private boolean hitTestOtherTetromino(Tetromino tetromino, int x, int y, byte moves){
-        //On itère sur chaque case de la representation du tetro
-        for (int i = 0; i < tetromino.getWidth(); i++) {
-            for (int j = 0; j < tetromino.getHeight(); j++) {
-
-            }
-        }
-
-
-        return true;
     }
 
     public Color getColorAt(int x, int y){
