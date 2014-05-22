@@ -10,23 +10,21 @@ package com.funtoginot.tetris.data.utils;
  */
 public class MatrixUtils {
 
-    public static final byte[][] rotateRight(byte[][] from, byte[][] to){
-        int n = from.length;
-
+    public static byte[][] rotateRight(byte[][] from, byte[][] to){
         copy2DArray(from, to);
         rotateRight(to);
 
         return to;
     }
 
-    public static final byte[][] rotateLeft(byte[][] from, byte[][] to){
+    public static byte[][] rotateLeft(byte[][] from, byte[][] to){
         copy2DArray(from, to);
         rotateLeft(to);
 
         return to;
     }
 
-    public static final byte[][] rotateRight(byte[][] matrix){
+    public static byte[][] rotateRight(byte[][] matrix){
         int n = matrix.length;
 
         for (int i = 0; i < n >> 1; i++) {
@@ -42,7 +40,7 @@ public class MatrixUtils {
         return matrix;
     }
 
-    public static final byte[][] rotateRight2(byte[][] matrix){
+    public static byte[][] rotateRight2(byte[][] matrix){
         int w = matrix.length;
         int h = matrix[0].length;
         byte[][] ret = new byte[h][w];
@@ -54,7 +52,7 @@ public class MatrixUtils {
         return ret;
     }
 
-    public static final byte[][] rotateLeft(byte[][] matrix){
+    public static byte[][] rotateLeft(byte[][] matrix){
         int n = matrix.length;
         for (int i = 0; i < n >> 1; i++) {
             for (int j = i; j< n - 1 - i; j++) {
@@ -69,7 +67,7 @@ public class MatrixUtils {
         return matrix;
     }
 
-    public static final byte[][] rotateLeft2(byte[][] matrix){
+    public static byte[][] rotateLeft2(byte[][] matrix){
         int w = matrix.length;
         int h = matrix[0].length;
         byte[][] ret = new byte[h][w];
@@ -81,7 +79,7 @@ public class MatrixUtils {
         return ret;
     }
 
-    public static final byte[][] copy2DArray(byte[][] matrix, byte[][] copy){
+    public static byte[][] copy2DArray(byte[][] matrix, byte[][] copy){
         for (int i = 0; i < matrix.length; i++) {
             for (int j = 0; j < matrix[i].length; j++) {
                 copy[i][j] = matrix[i][j];
