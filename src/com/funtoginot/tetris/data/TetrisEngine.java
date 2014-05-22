@@ -5,6 +5,7 @@ import com.funtoginot.tetris.data.tetrominos.Tetromino;
 import com.funtoginot.tetris.data.tetrominos.TetrominosFactory;
 import com.funtoginot.tetris.data.time.TimeManager;
 import com.funtoginot.tetris.data.time.listeners.TickListener;
+import com.funtoginot.tetris.data.utils.TetrominoMoveSelector;
 
 import java.awt.event.KeyEvent;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -200,7 +201,7 @@ public class TetrisEngine extends TetrisObservable implements TickListener {
         private int row;
         private int column;
 
-        private byte availableMoves;
+        private TetrominoMoveSelector availableMoves;
 
         /**
          * Renvoi le tetromino en cours de placement
@@ -217,16 +218,17 @@ public class TetrisEngine extends TetrisObservable implements TickListener {
         public void newSequence(Tetromino newTetromino){
             workingTetromino = newTetromino;
             row = -1;
-            column = (int)(Math.random() * (gameboard.getHeight() - workingTetromino.getHeight()));
+            column = (int)(Math.random() * (gameboard.getWidth() - workingTetromino.getWidth()));
         }
 
         /**
          * Met à jour la position du tetromino
+         * @return True si le mouvement est fini, false sinon
          */
         public boolean update() {
-            availableMoves = gameboard.getAvailableMoves(workingTetromino, row, column);
+            availableMoves = gameboard.getAvailableMoves(workingTetromino, column, row);
 
-            if((availableMoves & TetrisBoard.TRANSLATE_BOTTOM) != 0){
+            if(availableMoves.canTranslateBottom()){
                 ++row;
                 return false;
             }else{
@@ -236,42 +238,42 @@ public class TetrisEngine extends TetrisObservable implements TickListener {
 
         public void handleKeyboardEvent(int keycode){
 
+            availableMoves = gameboard.getAvailableMoves(workingTetromino, column, row);
+
             //Gestion des mutateurs
             switch(keycode) {
                 case KeyEvent.VK_UP:{
-                    if((availableMoves & TetrisBoard.ROTATE_RIGHT) != 0) {
+                    if(availableMoves.canRotateRight()) {
                         workingTetromino.rotateRight();
                     }
                     break;
                 }
                 case KeyEvent.VK_DOWN : {
-                    if((availableMoves & TetrisBoard.ROTATE_LEFT) != 0) {
+                    if(availableMoves.canRotateLeft()) {
                         workingTetromino.rotateLeft();
                     }
                     break;
                 }
                 case KeyEvent.VK_RIGHT : {
-                    if((availableMoves & TetrisBoard.TRANSLATE_RIGHT) != 0) {
+                    if(availableMoves.canTranslateRight()) {
                         ++column;
                     }
                     break;
                 }
                 case KeyEvent.VK_LEFT : {
-                    if((availableMoves & TetrisBoard.TRANSLATE_LEFT) != 0) {
+                    if(availableMoves.canTranslateLeft()) {
                         --column;
                     }
                     break;
                 }
-                case KeyEvent.VK_SPACE : {
+                /*case KeyEvent.VK_SPACE : {
                     if((availableMoves & TetrisBoard.TRANSLATE_BOTTOM) != 0) {
                         ++row;
                     }
                     break;
-                }
+                }*/
+                default:{}
             }
-
-            //On met à jour les mouvements possibles
-            availableMoves = gameboard.getAvailableMoves(workingTetromino, row, column);
         }
 
         public int getRow() {
