@@ -41,6 +41,16 @@ public class TimeManager {
     }
 
     /**
+     * Change le delais du Timer
+     * @param delay Delais à appliquer
+     */
+    public void changeDelay(int delay){
+        timer.cancel();
+        tick = delay;
+        run();
+    }
+
+    /**
      * Arrete le temps ! Sisi !
      */
     public void stop(){

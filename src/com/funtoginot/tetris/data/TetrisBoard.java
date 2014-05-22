@@ -15,40 +15,18 @@ public class TetrisBoard {
     public static final int TRANSLATE_LEFT = 1 << 2;
     public static final int TRANSLATE_RIGHT = 1 << 3;
     public static final int TRANSLATE_BOTTOM = 1 << 4;
+    public static final int ALL_MOVES_AVAILABLE = ROTATE_LEFT + ROTATE_RIGHT + TRANSLATE_LEFT + TRANSLATE_RIGHT + TRANSLATE_BOTTOM;
 
     private final int width;
     private final int height;
 
-    private int[][] grid;
+    private Color[][] grid;
 
     public TetrisBoard(int defaultRowsNumber, int defaultColumnsNumber){
         width = defaultRowsNumber;
         height = defaultColumnsNumber;
 
-        grid = new int[width][height];
-    }
-
-    /**
-     * Indique si le tetromino actuel est en contact avec un ou plusieurs autres tetrominos déjà placés
-     * @param tetromino Le tetromino actuellement en cours de placement
-     * @return True si en colision, false sinon
-     */
-    public boolean gravityTest(Tetromino tetromino, int x, int y){
-        //Calcul du point le plus éloigné du point d'origine de la piece (haut gauche).
-        Point bottomRight = new Point(x + tetromino.getWidth(), y + tetromino.getHeight());
-
-        //Gestion des sorties de plateau
-        if(bottomRight.x < width && bottomRight.y < height){
-            //Vérification de la colision avec un autre tetromino
-            byte availableMoves = getAvailableMoves(tetromino, x, y);
-
-            //Si la descente est possible, alors la chute peut continuer
-            if((availableMoves & TRANSLATE_BOTTOM) != 0){
-                return true;
-            }
-        }
-
-        return false;
+        initGrid();
     }
 
     /**
@@ -59,10 +37,26 @@ public class TetrisBoard {
      * @return Bitfield => 0 si aucun mouvement possible, voir ROTATE_LEFT, ROTATE_RIGHT, TRANSLATE_LEFT, TRANSLATE_RIGHT sinon
      */
     public byte getAvailableMoves(Tetromino tetromino, int x, int y){
-        byte moves = TRANSLATE_BOTTOM;
+        byte moves = 0;
 
+        //Calcul du point le plus éloigné du point d'origine de la piece (haut gauche).
+        Point bottomRight = new Point(x + tetromino.getHeight(), y + tetromino.getWidth());
 
+        //Gestion des sorties de plateau
+        if(bottomRight.x < width){
+            //On est encore sur le plateau
+            moves |= TRANSLATE_BOTTOM;
+        }
 
+        if(bottomRight.y < height){
+            moves |= TRANSLATE_RIGHT;
+        }
+
+        if(y > 0){
+            moves |= TRANSLATE_LEFT;
+        }
+
+       hitTestOtherTetromino(tetromino, x, y, moves);
 
         return moves;
     }
@@ -82,7 +76,7 @@ public class TetrisBoard {
         for (int i = grid.length - 1; i >= 0; --i) {
             for (int j = 0; j < grid[i].length; j++) {
                 //Si la valeur de la case est 0 (valeur par défaut), cette ligne n'st pas complète
-                if(grid[i][j] == 0){
+                if(grid[i][j] == Color.BLACK){
                     continue;
                 }
 
@@ -108,13 +102,44 @@ public class TetrisBoard {
                 if(tetromino.getWorkingTetromino().hasSquareAt(i, j)){
 
                     //On attribut la couleur
-                    grid[tetromino.getRow() + i][tetromino.getColumn() + j] = tetromino.getWorkingTetromino().getColor().getRGB();
+                    grid[tetromino.getRow() + i][tetromino.getColumn() + j] = tetromino.getWorkingTetromino().getColor();
                 }
             }
         }
     }
 
-    public int getColorAt(int x, int y){
+    /**
+     * Initialise la grille de jeu
+     */
+    private void initGrid(){
+        grid = new Color[width][height];
+        for(Color[] rows : grid){
+            Arrays.fill(rows, Color.BLACK);
+        }
+
+    }
+
+    /**
+     * Détermine si le tetromino est en contact avec d'autre tetromino sur la grille
+     * @param tetromino Le tetromino actuel
+     * @param x
+     * @param y
+     * @param moves
+     * @return True si en contact, false sinon
+     */
+    private boolean hitTestOtherTetromino(Tetromino tetromino, int x, int y, byte moves){
+        //On itère sur chaque case de la representation du tetro
+        for (int i = 0; i < tetromino.getWidth(); i++) {
+            for (int j = 0; j < tetromino.getHeight(); j++) {
+
+            }
+        }
+
+
+        return true;
+    }
+
+    public Color getColorAt(int x, int y){
         return grid[x][y];
     }
 

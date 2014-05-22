@@ -1,5 +1,4 @@
 import com.funtoginot.tetris.controller.TetrisController;
-import com.funtoginot.tetris.view.TetrisView;
 
 import javax.swing.*;
 
@@ -11,7 +10,7 @@ public class Tetris {
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
-                new TetrisController(new TetrisView()).handleStartAction();
+                new TetrisController().handleStartAction();
             }
         });
     }

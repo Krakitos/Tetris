@@ -28,14 +28,14 @@ public class Tetromino {
      * Opère une rotation de 90° vers la gauche sur le tetromino
      */
     public void rotateLeft(){
-        MatrixUtils.rotateLeft(matrix);
+        matrix = MatrixUtils.rotateLeft2(matrix);
     }
 
     /**
      * Opère une rotation de 90° vers la droite sur le tetromino
      */
     public void rotateRight(){
-        MatrixUtils.rotateRight(matrix);
+        matrix = MatrixUtils.rotateRight2(matrix);
     }
 
     /**
@@ -51,7 +51,7 @@ public class Tetromino {
     }
 
     /**
-     * Largeur du Tetromino
+     * Largeur de la matrice définissant le tetromino
      * @return La largeur du tetromino
      */
     public int getWidth(){
@@ -59,11 +59,58 @@ public class Tetromino {
     }
 
     /**
-     * Hauteur du tetromino
+     * Renvoi la largeur réelle du tetromino. getWidth() renvoie la largeur de la matrice utilisée pour la représentation
+     * mais certaines cases d'une même ligne / colonne peuvent ne pas être utilisées. Cette méthode tient compte
+     * de l'occupation des cases dans le tetromino.
+     * @return Largueur réelle du tetromino
+     */
+    public int getRealWidth(){
+
+        //TODO eviter de refaire le calcul à chaque fois. Le calculer uniquement lors d'une nouvelle rotation
+        int width = getWidth();
+
+        while(width > 0) {
+            for (int i = 0; i < matrix.length; i++) {
+                if(matrix[i][width - 1] != 0) return width;
+            }
+
+            --width;
+        }
+
+        System.out.println(width);
+
+        return width - 1;
+    }
+
+    /**
+     * Hauteur de la matrice définissant le tetromino
      * @return La hauteur du tetromino
      */
     public int getHeight(){
         return matrix[0].length;
+    }
+
+    /**
+     * Renvoi la hauteur réelle du tetromino. Voir getRealWidth
+     * @return hauteur réelle du tetromino
+     */
+    public int getRealHeight(){
+        //TODO eviter de refaire le calcul à chaque fois. Le calculer uniquement lors d'une nouvelle rotation
+        int height = getHeight() - 1;
+
+        for(byte[] row : matrix){
+            for (int i = 0; i < row.length; i++) {
+
+                //Si on a pas un 0 cette position, alors on peut assurer que la largeur est maximale sur ce point
+                if(row[i] != 0) return height;
+            }
+
+            System.out.println(height);
+
+            --height;
+        }
+
+        return height - 1;
     }
 
     /**

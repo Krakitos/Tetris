@@ -42,6 +42,18 @@ public class MatrixUtils {
         return matrix;
     }
 
+    public static final byte[][] rotateRight2(byte[][] matrix){
+        int w = matrix.length;
+        int h = matrix[0].length;
+        byte[][] ret = new byte[h][w];
+        for (int i = 0; i < h; ++i) {
+            for (int j = 0; j < w; ++j) {
+                ret[i][j] = matrix[w - j - 1][i];
+            }
+        }
+        return ret;
+    }
+
     public static final byte[][] rotateLeft(byte[][] matrix){
         int n = matrix.length;
         for (int i = 0; i < n >> 1; i++) {
@@ -55,6 +67,18 @@ public class MatrixUtils {
         }
 
         return matrix;
+    }
+
+    public static final byte[][] rotateLeft2(byte[][] matrix){
+        int w = matrix.length;
+        int h = matrix[0].length;
+        byte[][] ret = new byte[h][w];
+        for (int i = 0; i < h; ++i) {
+            for (int j = 0; j < w; ++j) {
+                ret[i][j] = matrix[j][h - i - 1];
+            }
+        }
+        return ret;
     }
 
     public static final byte[][] copy2DArray(byte[][] matrix, byte[][] copy){

@@ -13,7 +13,7 @@ public class TetrominosFactory {
 
     static{
         //I
-        tetrominos[0] = new byte[][]{{1,1,1,1},{0,0,0,0}, {0,0,0,0}, {0,0,0,0}};
+        tetrominos[0] = new byte[][]{{1,1,1,1}};
         tetrominos_colors[0] = Color.RED;
 
         //O
@@ -21,7 +21,7 @@ public class TetrominosFactory {
         tetrominos_colors[1] = Color.BLUE;
 
         //T
-        tetrominos[2] = new byte[][]{{1, 1, 1}, {0, 1, 0}, {0, 0, 0}};
+        tetrominos[2] = new byte[][]{{1, 1, 1}, {0, 1, 0}};
         tetrominos_colors[2] = Color.GRAY;
 
         //L
@@ -33,7 +33,7 @@ public class TetrominosFactory {
         tetrominos_colors[4] = Color.WHITE;
 
         //S
-        tetrominos[5] = new byte[][]{{0, 1, 1}, {1, 1, 0}, {0, 0, 0}};
+        tetrominos[5] = new byte[][]{{0, 1, 1}, {1, 1, 0}};
         tetrominos_colors[5] = Color.GREEN;
 
         //Z

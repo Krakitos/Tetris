@@ -32,6 +32,8 @@ public class TetrisEngine extends TetrisObservable implements TickListener {
 
     private MovementSequence sequence;
 
+    private int level = 1;
+
     private int points;
 
     /**
@@ -55,7 +57,7 @@ public class TetrisEngine extends TetrisObservable implements TickListener {
 
         gameboard = new TetrisBoard(rows, columns);
 
-        timeManager = new TimeManager(DEFAULT_TIMER_TICK);
+        timeManager = new TimeManager(DEFAULT_TIMER_TICK / level);
         timeManager.addTickListener(this);
 
         isRunning = new AtomicBoolean(false);
@@ -143,12 +145,18 @@ public class TetrisEngine extends TetrisObservable implements TickListener {
     }
 
     /**
-     * Renvoi le score actuel
+     * Renvoie le score actuel
      * @return Score du joueur
      */
     public int getScore(){
         return points;
     }
+
+    /**
+     * Renvoie le niveau actuel
+     * @return Niveau actuel
+     */
+    public int getLevel() { return level; }
 
     /**
      * Indique si le jeu est en cours d'exécution. Cette variable ne tient pas coupe de l'état 'en pause' du jeu.
@@ -166,6 +174,11 @@ public class TetrisEngine extends TetrisObservable implements TickListener {
         return isPaused.get();
     }
 
+    public TetrisBoard getBoard(){
+        return gameboard;
+    }
+
+
     /**
      * Initialize le jeu
      */
@@ -175,6 +188,7 @@ public class TetrisEngine extends TetrisObservable implements TickListener {
 
         sequence.newSequence(current);
     }
+
 
 
     /**
