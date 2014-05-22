@@ -18,6 +18,7 @@ public class TetrisView extends JFrame implements TetrisObserver {
     private static final String TITLE = "Tetris";
 
     private TetrisBoardPane boardPane;
+    private TetrisMenu menuPane;
 
     private final TetrisEngine model;
 
@@ -63,10 +64,15 @@ public class TetrisView extends JFrame implements TetrisObserver {
         Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
         frame.setLocation(((int) (screen.getWidth() - getWidth()) / 2), ((int) (screen.getHeight() - getHeight()) / 2));*/
 
+        //On instancie les Jpanels
         boardPane = new TetrisBoardPane();
+        menuPane = new TetrisMenu();
+
         /* Set default close action */
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.add(boardPane);
+
+        frame.add(menuPane);
+
         //frame.add(new JLabel("Hello"), BorderLayout.EAST);
         frame.pack();
         frame.setLocationRelativeTo(null);

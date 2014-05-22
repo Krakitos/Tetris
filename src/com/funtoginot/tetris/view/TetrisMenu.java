@@ -1,51 +1,64 @@
 package com.funtoginot.tetris.view;
 
-
 import javax.swing.*;
-import java.awt.event.KeyEvent;
-
+import java.awt.event.ActionListener;
 
 /**
  * Created by cdric on 22/05/2014.
  */
-public class TetrisMenu extends JPanel {
-
-    private JMenuBar menuBar;
-    private JMenu menu;
-    private JMenuItem menuItem;
-
-    public TetrisMenu(){
 
 
-        menuBar = new JMenuBar();
+public class TetrisMenu extends JPanel implements ActionListener {
+
+    JButton startG,exitG;
+    JPanel panel;
+    ImageIcon ii;
+    JLabel picture;
+
+    public TetrisMenu()
+    {
+
+        //Start Game Button
+        startG = new JButton("Start Game");
+        startG.setBounds(50, 100, 100, 30);
+        startG.setFocusable(false);
+        add(startG);
 
 
-        menu = new JMenu("File");
-        menu.setMnemonic(KeyEvent.VK_F);
-        menu.getAccessibleContext().setAccessibleDescription(
-                "File menu");
-        menuBar.add(menu);
+        //Exit Game Button
+        exitG = new JButton("Exit Game");
+        exitG.setBounds(50,200,100,30);
+        exitG.setFocusable(false);
+       add(exitG);
+
+        //Add background
+//        ii = new ImageIcon(this.getClass().getResource("1.jpg"));
+        //picture = new JLabel(new ImageIcon(ii.getImage()));
+       // add(picture);
+
+        startG.addActionListener(this);
+        exitG.addActionListener(this);
 
 
-        menuItem = new JMenuItem("New",
-                new ImageIcon("images/new.gif"));
-        menuItem.setMnemonic(KeyEvent.VK_N);
-        menu.add(menuItem);
-
-
-        menu.addSeparator();
-
-        menuItem = new JMenuItem("Pause", new ImageIcon("images/pause.gif"));
-        menuItem.setMnemonic(KeyEvent.VK_P);
-        menu.add(menuItem);
-
-        menuItem = new JMenuItem("Exit", new ImageIcon("images/exit.gif"));
-        menuItem.setMnemonic(KeyEvent.VK_E);
-        menu.add(menuItem);
-
-
-        frame.setJMenuBar(theJMenuBar);
+        setSize(200,400);
+        setVisible(true);
     }
 
 
+
+    @Override
+    public void actionPerformed(java.awt.event.ActionEvent e) {
+        if(e.getSource() == startG)
+        {
+            System.out.println("New Game - button is working");
+
+
+        }
+        else if(e.getSource() == exitG)
+        {
+            System.out.println("Game is exiting - button is working");
+            System.exit(0);
+        }
+
+    }
 }
