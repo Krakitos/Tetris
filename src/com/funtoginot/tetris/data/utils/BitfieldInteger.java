@@ -22,7 +22,7 @@ public class BitfieldInteger {
     }
 
     public int getBit(int bit){
-        return (bitfield.get() & (1 << bit));
+        return (bitfield.get() & (1 << bit)) == 0 ? 0 : 1;
     }
 
     public int toggleBit(int bit){
@@ -45,5 +45,9 @@ public class BitfieldInteger {
 
     public byte getByte(){
         return bitfield.byteValue();
+    }
+
+    protected void reset() {
+        bitfield.set(0);
     }
 }
