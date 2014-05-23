@@ -158,14 +158,15 @@ public class TetrisBoard {
     }
 
     public void mergeTetromino(TetrisEngine.MovementSequence tetromino){
-        for (int i = 0; i < tetromino.getWorkingTetromino().getHeight(); i++) {
-            for (int j = 0; j < tetromino.getWorkingTetromino().getWidth(); j++) {
+
+        for (int i = 0; i < tetromino.getWorkingTetromino().getWidth(); i++) {
+            for (int j = 0; j < tetromino.getWorkingTetromino().getHeight(); j++) {
 
                 //Si un carré est défini à cette position dans la matrice
-                if(tetromino.getWorkingTetromino().hasSquareAt(j, i)){
+                if(tetromino.getWorkingTetromino().hasSquareAt(i, j)){
 
                     //On attribut la couleur
-                    grid[tetromino.getRow() + i][tetromino.getColumn() + j] = tetromino.getWorkingTetromino().getColor();
+                    setColorAt(tetromino.getColumn() + i, tetromino.getRow() + j, tetromino.getWorkingTetromino().getColor());
                 }
             }
         }
@@ -177,6 +178,10 @@ public class TetrisBoard {
             Arrays.fill(rows, EMPTY_CELL);
         }
 
+    }
+
+    private void setColorAt(int x, int y, Color color){
+        grid[y][x] = color;
     }
 
     public Color getColorAt(int x, int y){
