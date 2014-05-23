@@ -3,7 +3,6 @@ package com.funtoginot.tetris.view;
 import com.funtoginot.tetris.data.TetrisEngine;
 import com.funtoginot.tetris.data.observers.TetrisObserver;
 import com.funtoginot.tetris.data.tetrominos.Tetromino;
-import com.funtoginot.tetris.view.menu.TetrisMenuPane;
 
 import javax.swing.*;
 import java.awt.*;

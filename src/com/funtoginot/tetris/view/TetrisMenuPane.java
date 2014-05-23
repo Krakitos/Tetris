@@ -1,4 +1,4 @@
-package com.funtoginot.tetris.view.menu;
+package com.funtoginot.tetris.view;
 
 import com.funtoginot.tetris.data.tetrominos.Tetromino;
 import com.funtoginot.tetris.view.components.TetrominoPreview;
