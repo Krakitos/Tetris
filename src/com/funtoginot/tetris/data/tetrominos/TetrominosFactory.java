@@ -29,7 +29,7 @@ public class TetrominosFactory {
         tetrominos_colors[3] = Color.MAGENTA;
 
         //J
-        tetrominos[4] = new byte[][]{{0, 0, 1}, {0, 0, 1}, {0, 1, 1}};
+        tetrominos[4] = new byte[][]{{0, 1}, {0, 1}, {1, 1}};
         tetrominos_colors[4] = Color.WHITE;
 
         //S
@@ -37,7 +37,7 @@ public class TetrominosFactory {
         tetrominos_colors[5] = Color.GREEN;
 
         //Z
-        tetrominos[6] = new byte[][]{{1, 1, 0}, {0, 1, 1}, {0, 0, 0}};
+        tetrominos[6] = new byte[][]{{1, 1, 0}, {0, 1, 1}};
         tetrominos_colors[6] = Color.CYAN;
     }
 

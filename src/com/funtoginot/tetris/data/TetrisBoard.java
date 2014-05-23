@@ -1,6 +1,7 @@
 package com.funtoginot.tetris.data;
 
 import com.funtoginot.tetris.data.tetrominos.Tetromino;
+import com.funtoginot.tetris.data.utils.TetrominoMoveSelector;
 
 import java.awt.*;
 import java.util.Arrays;
@@ -10,12 +11,7 @@ import java.util.Arrays;
  */
 public class TetrisBoard {
 
-    public static final int ROTATE_LEFT = 1;
-    public static final int ROTATE_RIGHT = 1 << 1;
-    public static final int TRANSLATE_LEFT = 1 << 2;
-    public static final int TRANSLATE_RIGHT = 1 << 3;
-    public static final int TRANSLATE_BOTTOM = 1 << 4;
-    public static final int ALL_MOVES_AVAILABLE = ROTATE_LEFT + ROTATE_RIGHT + TRANSLATE_LEFT + TRANSLATE_RIGHT + TRANSLATE_BOTTOM;
+    public static final Color EMPTY_CELL = Color.BLACK;
 
     private final int width;
     private final int height;
@@ -23,8 +19,8 @@ public class TetrisBoard {
     private Color[][] grid;
 
     public TetrisBoard(int defaultRowsNumber, int defaultColumnsNumber){
-        width = defaultRowsNumber;
-        height = defaultColumnsNumber;
+        width = defaultColumnsNumber;
+        height = defaultRowsNumber;
 
         initGrid();
     }
@@ -36,28 +32,96 @@ public class TetrisBoard {
      * @param y La composante Y du prochain mouvement du tetromino
      * @return Bitfield => 0 si aucun mouvement possible, voir ROTATE_LEFT, ROTATE_RIGHT, TRANSLATE_LEFT, TRANSLATE_RIGHT sinon
      */
-    public byte getAvailableMoves(Tetromino tetromino, int x, int y){
-        byte moves = 0;
+    public TetrominoMoveSelector getAvailableMoves(Tetromino tetromino, int x, int y){
+        TetrominoMoveSelector moves = new TetrominoMoveSelector();
 
-        //Calcul du point le plus éloigné du point d'origine de la piece (haut gauche).
-        Point bottomRight = new Point(x + tetromino.getWidth(), y + tetromino.getHeight());
-
-        //Gestion des sorties de plateau
-        if(bottomRight.y < height){
-
-            //On est encore sur le plateau
-            moves |= TRANSLATE_BOTTOM;
-        }
-
-        if(bottomRight.x < width){
-            moves |= TRANSLATE_RIGHT;
-        }
-
-        if(x > 0){
-            moves |= TRANSLATE_LEFT;
-        }
+        checkRight(moves, tetromino, x, y);
+        checkLeft(moves, tetromino, x, y);
+        checkBottom(moves, tetromino, x, y);
+        checkRotations(moves, tetromino, x, y);
 
         return moves;
+    }
+
+    private void checkRight(TetrominoMoveSelector moves, Tetromino tetromino, int x, int y) {
+        //Si on est pas entrain de sortir de l'écran
+        if(x + tetromino.getWidth() == width || y == -1){
+            moves.removeTranslateRight();
+        }else {
+
+            //Block nommé pour sortir de la boucle imbriquée
+            loop :
+            {
+                for (int i = 0; i < tetromino.getWidth(); i++) {
+                    for (int j = 0; j < tetromino.getHeight(); j++) {
+                        //Si on a un carré à cette position
+                        if (tetromino.hasSquareAt(i, j)) {
+                            if (getColorAt(x + i + 1, y + j) != EMPTY_CELL) {
+                                moves.removeTranslateRight();
+                                break loop; //on sort de la boucle
+                            }
+                        }
+                    }
+                }
+
+                moves.addTranslateRight();
+            }
+        }
+    }
+
+    private void checkLeft(TetrominoMoveSelector moves, Tetromino tetromino, int x, int y) {
+        if(x == 0 || y == -1){
+            moves.removeTranslateLeft();
+        }else {
+            //Block nommé pour sortir proprement de la double boucle imbriquée
+            loop:
+            {
+                for (int i = 0; i < tetromino.getWidth(); i++) {
+                    for (int j = 0; j < tetromino.getHeight(); j++) {
+                        //Si on a un carré à cette position
+                        if (tetromino.hasSquareAt(i, j)) {
+                            //Et que la couleur n'est pas celle du cellule vide
+                            if (getColorAt(x + i - 1, y + j) != EMPTY_CELL) {
+                                moves.removeTranslateLeft();
+                                break loop; //On sort de la boucle
+                            }
+                        }
+                    }
+                }
+                moves.addTranslateLeft();
+            }
+        }
+    }
+
+    private void checkBottom(TetrominoMoveSelector moves, Tetromino tetromino, int x, int y) {
+        if(y + tetromino.getHeight() == height){
+            moves.removeTranslateBottom();
+        }else{
+            loop :
+            {
+                for (int i = 0; i < tetromino.getHeight(); i++) {
+                    for (int j = 0; j < tetromino.getWidth(); j++) {
+                        if (tetromino.hasSquareAt(j, i)) {
+                            if (getColorAt(x + j, y + i + 1) != EMPTY_CELL) {
+                                moves.removeTranslateBottom();
+                                break loop;
+                            }
+                        }
+                    }
+                }
+                moves.addTranslateBottom();
+            }
+        }
+    }
+
+    private void checkRotations(TetrominoMoveSelector moves, Tetromino tetromino, int x, int y) {
+        //Si c'est un carré, la rotation est transparente
+        if(tetromino.getHeight() == tetromino.getWidth()){
+            moves.addRotateRight();
+            moves.addRotateLeft();
+        }else{
+
+        }
     }
 
     /**
@@ -75,7 +139,7 @@ public class TetrisBoard {
         for (int i = grid.length - 1; i >= 0; --i) {
             for (int j = 0; j < grid[i].length; j++) {
                 //Si la valeur de la case est 0 (valeur par défaut), cette ligne n'st pas complète
-                if(grid[i][j] == Color.BLACK){
+                if(grid[i][j] == EMPTY_CELL){
                     continue;
                 }
 
@@ -94,11 +158,11 @@ public class TetrisBoard {
     }
 
     public void mergeTetromino(TetrisEngine.MovementSequence tetromino){
-        for (int i = 0; i < tetromino.getWorkingTetromino().getWidth(); i++) {
-            for (int j = 0; j < tetromino.getWorkingTetromino().getHeight(); j++) {
+        for (int i = 0; i < tetromino.getWorkingTetromino().getHeight(); i++) {
+            for (int j = 0; j < tetromino.getWorkingTetromino().getWidth(); j++) {
 
                 //Si un carré est défini à cette position dans la matrice
-                if(tetromino.getWorkingTetromino().hasSquareAt(i, j)){
+                if(tetromino.getWorkingTetromino().hasSquareAt(j, i)){
 
                     //On attribut la couleur
                     grid[tetromino.getRow() + i][tetromino.getColumn() + j] = tetromino.getWorkingTetromino().getColor();
@@ -108,15 +172,15 @@ public class TetrisBoard {
     }
 
     private void initGrid(){
-        grid = new Color[width][height];
+        grid = new Color[height][width];
         for(Color[] rows : grid){
-            Arrays.fill(rows, Color.BLACK);
+            Arrays.fill(rows, EMPTY_CELL);
         }
 
     }
 
     public Color getColorAt(int x, int y){
-        return grid[x][y];
+        return grid[y][x];
     }
 
     public int getWidth() {
