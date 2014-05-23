@@ -188,6 +188,7 @@ public class TetrisEngine extends TetrisObservable implements TickListener {
         next = tetrominosFactory.getTetromino();
 
         sequence.newSequence(current);
+        fireCurrentTetrominoChanged(sequence, next);
     }
 
 

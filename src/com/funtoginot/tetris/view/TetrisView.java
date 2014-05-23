@@ -21,7 +21,7 @@ public class TetrisView extends JFrame implements TetrisObserver {
 
     private TetrisBoardPane centre;
     private TetrisMenuPane droite;
-    private TetrisMenu menuPane;
+    //private TetrisMenu menuPane;
 
     private final TetrisEngine model;
 
@@ -97,11 +97,12 @@ public class TetrisView extends JFrame implements TetrisObserver {
     }
 
     @Override
-    public void onCurrentTetrominoChanged(TetrisEngine.MovementSequence current, Tetromino tetromino) {
+    public void onCurrentTetrominoChanged(TetrisEngine.MovementSequence current, final Tetromino tetromino) {
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
-                //TODO : Impl
+                System.out.println("update");
+                droite.updateNextTetromino(tetromino);
             }
         });
     }
@@ -111,7 +112,7 @@ public class TetrisView extends JFrame implements TetrisObserver {
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
-                centre.deleteRow(rows);
+                centre.deleteRow(model.getBoard(), rows);
             }
         });
     }
