@@ -22,6 +22,6 @@ public class Cell extends JLabel {
 
     @Override
     public Dimension getPreferredSize() {
-        return new Dimension(30, 30);
+        return new Dimension(25, 25);
     }
 }

@@ -12,8 +12,8 @@ import java.awt.event.KeyListener;
  */
 public class TetrisView extends JFrame implements TetrisObserver {
 
-    public static final int DEFAULT_WIDTH = 100;
-    public static final int DEFAULT_HEIGHT = 200;
+    public static final int DEFAULT_WIDTH = 300;
+    public static final int DEFAULT_HEIGHT = 600;
 
     private static final String TITLE = "Tetris";
 
@@ -57,8 +57,8 @@ public class TetrisView extends JFrame implements TetrisObserver {
 
         frame.setJMenuBar(menuBar);
 
-        /* Set window size */
-        frame.setSize(DEFAULT_WIDTH, DEFAULT_HEIGHT);
+
+
 
         /* Center the window
         Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
@@ -75,6 +75,8 @@ public class TetrisView extends JFrame implements TetrisObserver {
 
         //frame.add(new JLabel("Hello"), BorderLayout.EAST);
         frame.pack();
+        /* Set window size */
+        frame.setSize(DEFAULT_WIDTH, DEFAULT_HEIGHT);
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
     }

@@ -17,7 +17,7 @@ public class TetrisBoardPane extends JPanel {
     public static final int GRID_ROWS = TetrisEngine.DEFAULT_ROWS_NUMBER;
     public static final int GRID_COLS = TetrisEngine.DEFAULT_COLUMNS_NUMBER;
 
-    private static final Color DEFAULT_COLOR = Color.BLACK;
+    public static final Color DEFAULT_COLOR = Color.BLACK;
 
     public TetrisBoardPane() {
         int index = 0;
