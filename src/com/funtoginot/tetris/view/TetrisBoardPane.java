@@ -39,7 +39,7 @@ public class TetrisBoardPane extends JPanel {
         //Mise à jour du tetromino
         for (int i = 0; i < sequence.getWorkingTetromino().getWidth(); i++) {
             for (int j = 0; j < sequence.getWorkingTetromino().getHeight(); j++) {
-                Cell cell = (Cell) getComponent((i + sequence.getRow()) * GRID_COLS + (j + sequence.getColumn()));
+                Cell cell = getCellAt(sequence.getColumn() + i, sequence.getRow() + j);
 
                 if(sequence.getWorkingTetromino().hasSquareAt(i, j)){
                     cell.setBackground(sequence.getWorkingTetromino().getColor());
@@ -57,34 +57,6 @@ public class TetrisBoardPane extends JPanel {
     }
 
     /**
-     * Détermine la couleur à appliquer à la cellule {x,y}
-     * @param x Coordonnée en x sur le plateau
-     * @param y Coordonnée en y sur le plateau
-     * @param cell La cellule à colorier
-     * @param sequence Sequence de jeu
-     * @return Couleur à appliquer
-     */
-    private Color computeCellColor(int x, int y, Cell cell,  TetrisEngine.MovementSequence sequence){
-
-        if(inside(x, y, sequence)){
-
-        }
-
-        return cell.getBackground() == null ? DEFAULT_COLOR : cell.getBackground();
-    }
-
-    /**
-     * Indique si le couple coordonnées x, sont recouvertes par le tetromino
-     * @param x Coordonnée en x sur le plateau
-     * @param y Coordonnée en y sur le plateau
-     * @param tetromino Sequence de jeu
-     * @return True si le couple coordonnées sont recouvertes par le tetromino
-     */
-    private boolean inside(int x, int y, TetrisEngine.MovementSequence tetromino){
-        return false;
-    }
-
-    /**
      * Met à jour l'affichage en fonction du model sans tenir compte du tetromino en cours de placement
      */
     private void refreshBoardView(TetrisBoard board){
@@ -93,9 +65,13 @@ public class TetrisBoardPane extends JPanel {
 
         for (int i = 0; i < width; i++) {
             for (int j = 0; j < height; j++) {
-                Cell cell = (Cell) getComponent(i * GRID_COLS + j);
+                Cell cell = getCellAt(i, j);
                 cell.setBackground(board.getColorAt(i, j));
             }
         }
+    }
+
+    private Cell getCellAt(int x, int y){
+        return (Cell) getComponent(y * GRID_COLS + x);
     }
 }

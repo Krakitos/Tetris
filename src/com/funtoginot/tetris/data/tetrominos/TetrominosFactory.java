@@ -25,7 +25,7 @@ public class TetrominosFactory {
         tetrominos_colors[2] = Color.GRAY;
 
         //L
-        tetrominos[3] = new byte[][]{{1, 0, 0}, {1, 0, 0}, {1, 1, 0}};
+        tetrominos[3] = new byte[][]{{1, 0}, {1, 0}, {1, 1}};
         tetrominos_colors[3] = Color.MAGENTA;
 
         //J
