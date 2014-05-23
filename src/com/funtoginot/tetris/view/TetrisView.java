@@ -3,8 +3,10 @@ package com.funtoginot.tetris.view;
 import com.funtoginot.tetris.data.TetrisEngine;
 import com.funtoginot.tetris.data.observers.TetrisObserver;
 import com.funtoginot.tetris.data.tetrominos.Tetromino;
+import com.funtoginot.tetris.view.menu.TetrisMenuPane;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.KeyListener;
 
 /**
@@ -17,12 +19,13 @@ public class TetrisView extends JFrame implements TetrisObserver {
 
     private static final String TITLE = "Tetris";
 
-    private TetrisBoardPane boardPane;
+    private TetrisBoardPane centre;
+    private TetrisMenuPane droite;
     private TetrisMenu menuPane;
 
     private final TetrisEngine model;
 
-    public TetrisView(TetrisEngine model){
+    public TetrisView(TetrisEngine model) {
         this.model = model;
         configureWindow();
     }
@@ -62,8 +65,16 @@ public class TetrisView extends JFrame implements TetrisObserver {
         frame.setLocation(((int) (screen.getWidth() - getWidth()) / 2), ((int) (screen.getHeight() - getHeight()) / 2));*/
 
         //On instancie les Jpanels
-        boardPane = new TetrisBoardPane();
-        menuPane = new TetrisMenu();
+        centre = new TetrisBoardPane();
+        droite = new TetrisMenuPane();
+        // menuPane = new TetrisMenu();
+
+
+        setLayout(new BorderLayout());
+
+        add(centre, BorderLayout.CENTER);
+        add(droite, BorderLayout.EAST);
+        setVisible(true);
 
 
         setVisible(true);
@@ -71,19 +82,18 @@ public class TetrisView extends JFrame implements TetrisObserver {
         /* Set default close action */
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        add(boardPane);
 
         pack();
 
         /* Set window size */
-       // setSize(DEFAULT_WIDTH, DEFAULT_HEIGHT);
+        // setSize(DEFAULT_WIDTH, DEFAULT_HEIGHT);
         setLocationRelativeTo(null);
         setVisible(true);
     }
 
-    public void addKeyListener(KeyListener listener){
-        boardPane.setFocusable(true);
-        boardPane.addKeyListener(listener);
+    public void addKeyListener(KeyListener listener) {
+        centre.setFocusable(true);
+        centre.addKeyListener(listener);
     }
 
     @Override
@@ -101,7 +111,7 @@ public class TetrisView extends JFrame implements TetrisObserver {
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
-                boardPane.deleteRow(rows);
+                centre.deleteRow(rows);
             }
         });
     }
@@ -112,8 +122,8 @@ public class TetrisView extends JFrame implements TetrisObserver {
         refreshUI(current);
     }
 
-    public void drawTetromino(final TetrisEngine.MovementSequence sequence){
-        boardPane.update(model.getBoard(), sequence);
+    public void drawTetromino(final TetrisEngine.MovementSequence sequence) {
+        centre.update(model.getBoard(), sequence);
     }
 
     @Override
@@ -140,14 +150,15 @@ public class TetrisView extends JFrame implements TetrisObserver {
      * Met à jour l'affichage en prenant en compte le contexte d'exécution actuel (Quel Thread execute cette methode)
      * La mise à jour des éléments graphiques ne pouvant se faire uniquement dans le processus d'affichage (Event Dispatching Thread)
      * De ce fait, cette méthode demandera toujours un rafraichissement dans l'UI Thread.
+     *
      * @param sequence Tetromino en cours de placement
      */
-    private void refreshUI(final TetrisEngine.MovementSequence sequence){
+    private void refreshUI(final TetrisEngine.MovementSequence sequence) {
 
         //Si l'appel est issu du processus d'affichage, on l'exécute.
-        if(SwingUtilities.isEventDispatchThread()){
-            boardPane.update(model.getBoard(), sequence);
-        }else{ //Sinon on décharge le processus appellant de la mise à jour pour la faire dans le processus d'UI
+        if (SwingUtilities.isEventDispatchThread()) {
+            centre.update(model.getBoard(), sequence);
+        } else { //Sinon on décharge le processus appellant de la mise à jour pour la faire dans le processus d'UI
             SwingUtilities.invokeLater(new Runnable() {
                 @Override
                 public void run() {
