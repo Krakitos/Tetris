@@ -57,9 +57,6 @@ public class TetrisView extends JFrame implements TetrisObserver {
 
         frame.setJMenuBar(menuBar);
 
-
-
-
         /* Center the window
         Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
         frame.setLocation(((int) (screen.getWidth() - getWidth()) / 2), ((int) (screen.getHeight() - getHeight()) / 2));*/
