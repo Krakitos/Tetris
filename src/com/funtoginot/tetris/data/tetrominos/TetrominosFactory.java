@@ -13,7 +13,7 @@ public class TetrominosFactory {
 
     static{
         //I
-        tetrominos[0] = new byte[][]{{1,1,1,1}};
+        tetrominos[0] = new byte[][]{{1},{1},{1},{1}};
         tetrominos_colors[0] = Color.RED;
 
         //O
@@ -48,7 +48,7 @@ public class TetrominosFactory {
     }
 
     public Tetromino getTetromino(){
-        int index = (int)(Math.random() * (tetrominos.length - 1));
+       int index = (int)(Math.random() * (tetrominos.length - 1));
 
         return new Tetromino(tetrominos_colors[index], cloneTetromino(index));
     }
