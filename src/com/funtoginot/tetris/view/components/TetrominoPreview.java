@@ -1,6 +1,7 @@
 package com.funtoginot.tetris.view.components;
 
 import com.funtoginot.tetris.data.tetrominos.Tetromino;
+import com.funtoginot.tetris.view.cell.Cell;
 
 import javax.swing.*;
 import java.awt.*;
@@ -10,26 +11,18 @@ import java.awt.*;
  */
 public class TetrominoPreview extends JPanel {
 
-    private GridLayout gridLayout = new GridLayout();
+    private GridLayout gridLayout = new GridLayout(1,1);
 
     public TetrominoPreview() {
         super();
         setLayout(gridLayout);
 
-        for (int i = 0; i < 3; i++) {
-            for (int j = 0; j < 3; j++) {
-                JLabel label = new JLabel();
-                label.setForeground(Color.BLUE);
-                //label.setOpaque(true);
-                add(label);
-            }
-        }
+        Cell cell = new Cell(Color.BLUE);
+        add(cell);
     }
 
     public void updateView(Tetromino tetromino){
-        System.out.println(getSize());
-
-        gridLayout.setColumns(tetromino.getWidth());
+        /*gridLayout.setColumns(tetromino.getWidth());
         gridLayout.setRows(tetromino.getHeight());
 
         setLayout(gridLayout);
@@ -47,6 +40,7 @@ public class TetrominoPreview extends JPanel {
             }
         }
 
-        invalidate();
+        doLayout();
+        invalidate();*/
     }
 }

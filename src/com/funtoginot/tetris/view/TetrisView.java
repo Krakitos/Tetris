@@ -13,7 +13,7 @@ import java.awt.event.KeyListener;
  */
 public class TetrisView extends JFrame implements TetrisObserver {
 
-    public static final int DEFAULT_WIDTH = 250;
+    public static final int DEFAULT_WIDTH = 500;
     public static final int DEFAULT_HEIGHT = 600;
 
     private static final String TITLE = "Tetris";
@@ -36,6 +36,9 @@ public class TetrisView extends JFrame implements TetrisObserver {
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+        /* Set default close action */
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         /* Show window */
         setTitle("Tetris");
@@ -72,21 +75,15 @@ public class TetrisView extends JFrame implements TetrisObserver {
         setLayout(new BorderLayout());
 
         add(centre, BorderLayout.CENTER);
-        add(droite, BorderLayout.EAST);
-        setVisible(true);
-
-
-        setVisible(true);
-
-        /* Set default close action */
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
+        add(droite, BorderLayout.LINE_END);
 
         pack();
 
+        setVisible(true);
+
         /* Set window size */
-        // setSize(DEFAULT_WIDTH, DEFAULT_HEIGHT);
-        setLocationRelativeTo(null);
+        setSize(DEFAULT_WIDTH, DEFAULT_HEIGHT);
+        //setLocationRelativeTo(null);
         setVisible(true);
     }
 
@@ -100,8 +97,7 @@ public class TetrisView extends JFrame implements TetrisObserver {
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
-                System.out.println("update");
-                droite.updateNextTetromino(tetromino);
+                  droite.updateNextTetromino(tetromino);
             }
         });
     }

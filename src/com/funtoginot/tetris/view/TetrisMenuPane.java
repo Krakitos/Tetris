@@ -28,20 +28,20 @@ public class TetrisMenuPane extends JPanel {
         setLayout(new GridLayout(2, 1));
 
         //On crée et ajoute les deux Panels qui vont êtres insérés dans les deux lignes du GridLayout
-        partieCours = new JPanel();
+        //partieCours = new JPanel();
         preview = new TetrominoPreview();
         boutons = new JPanel();
 
         //A l'intérieur de ces derniers, on insère deux GridLayout
-        partieCours.setLayout(new GridLayout(1, 1));
+        //partieCours.setLayout(new GridLayout(1, 1));
         boutons.setLayout(new GridLayout(2, 1));
 
         //On ajoute les éléments souhaités
-        partieCours.add(preview);
+        //partieCours.add(preview);
         boutons.add(boutonStart);
         boutons.add(boutonQuit);
 
-        add(partieCours);
+        add(preview);
         add(boutons);
     }
 

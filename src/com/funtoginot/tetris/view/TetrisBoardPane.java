@@ -2,6 +2,7 @@ package com.funtoginot.tetris.view;
 
 import com.funtoginot.tetris.data.TetrisBoard;
 import com.funtoginot.tetris.data.TetrisEngine;
+import com.funtoginot.tetris.data.tetrominos.Tetromino;
 import com.funtoginot.tetris.view.cell.Cell;
 import com.funtoginot.tetris.view.layout.TetrisLayout;
 
@@ -20,15 +21,13 @@ public class TetrisBoardPane extends JPanel {
     public static final Color DEFAULT_COLOR = Color.BLACK;
 
     public TetrisBoardPane() {
-        int index = 0;
         setLayout(new TetrisLayout(GRID_ROWS, GRID_COLS));
+
         for (int row = 0; row < GRID_ROWS; row++) {
             for (int col = 0; col < GRID_COLS; col++) {
                 Color color = DEFAULT_COLOR;
                 add(new Cell(color), new Point(col, row));
-                index++;
             }
-            index++;
         }
     }
 
@@ -52,8 +51,19 @@ public class TetrisBoardPane extends JPanel {
      * Supprime les lignes du plateau
      * @param rows Les lignes à supprimer
      */
-    public void deleteRow(int[] rows){
+    public void deleteRow(TetrisBoard board, int[] rows){
 
+        //Pour chaque ligne du tableau
+        for (int i = 0; i < rows.length; i++) {
+
+            //On met à jour toutes les cellules
+            for (int j = 0; j < board.getWidth(); j++) {
+                Cell cell = getCellAt(j, i);
+                cell.setBackground(DEFAULT_COLOR);
+            }
+        }
+
+        refreshBoardView(board);
     }
 
     /**

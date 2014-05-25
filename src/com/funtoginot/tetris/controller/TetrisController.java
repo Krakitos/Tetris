@@ -48,7 +48,7 @@ public class TetrisController implements KeyListener {
     public void keyTyped(KeyEvent e) {}
 
     @Override
-    public void keyPressed(KeyEvent e) {
+    public void keyPressed(final KeyEvent e) {
         if(isValidKeyboardInput(e.getKeyCode())) {
             view.drawTetromino(engine.handleKeyPressed(e.getKeyCode()));
         }
