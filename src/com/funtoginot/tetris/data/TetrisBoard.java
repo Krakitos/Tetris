@@ -169,7 +169,6 @@ public class TetrisBoard {
             if(isRowFull(i)){
                 if(row == -1){
                     row = i;
-                    System.out.println("Row full : " + row);
                 }
                 ++count;
 
