@@ -45,15 +45,15 @@ public class TetrisBoard {
 
     private void checkRight(TetrominoMoveSelector moves, Tetromino tetromino, int x, int y) {
         //Si on est pas entrain de sortir de l'écran
-        if(x + tetromino.getWidth() == width || y == -1){
+        if(x + tetromino.getWidth() >= width || y == -1){
             moves.removeTranslateRight();
         }else {
 
             //Block nommé pour sortir de la boucle imbriquée
             loop :
             {
-                for (int i = 0; i < tetromino.getWidth(); i++) {
-                    for (int j = 0; j < tetromino.getHeight(); j++) {
+                for (int i = 0; i < tetromino.getWidth() && x + i  < width; i++) {
+                    for (int j = 0; j < tetromino.getHeight() && y + j < height; j++) {
                         //Si on a un carré à cette position
                         if (tetromino.hasSquareAt(i, j)) {
                             if (getColorAt(x + i + 1, y + j) != EMPTY_CELL) {
@@ -70,14 +70,14 @@ public class TetrisBoard {
     }
 
     private void checkLeft(TetrominoMoveSelector moves, Tetromino tetromino, int x, int y) {
-        if(x == 0 || y == -1){
+        if(x <= 0 || y == -1){
             moves.removeTranslateLeft();
         }else {
             //Block nommé pour sortir proprement de la double boucle imbriquée
             loop:
             {
-                for (int i = 0; i < tetromino.getWidth(); i++) {
-                    for (int j = 0; j < tetromino.getHeight(); j++) {
+                for (int i = 0; i < tetromino.getWidth() && x + i < width; i++) {
+                    for (int j = 0; j < tetromino.getHeight() && y + j < height; j++) {
                         //Si on a un carré à cette position
                         if (tetromino.hasSquareAt(i, j)) {
                             //Et que la couleur n'est pas celle du cellule vide
@@ -94,13 +94,13 @@ public class TetrisBoard {
     }
 
     private void checkBottom(TetrominoMoveSelector moves, Tetromino tetromino, int x, int y) {
-        if(y + tetromino.getHeight() == height){
+        if(y + tetromino.getHeight() >= height){
             moves.removeTranslateBottom();
         }else{
             loop :
             {
-                for (int i = 0; i < tetromino.getHeight(); i++) {
-                    for (int j = 0; j < tetromino.getWidth(); j++) {
+                for (int i = 0; i < tetromino.getHeight() && y + i < height; i++) {
+                    for (int j = 0; j < tetromino.getWidth() && x + j < width; j++) {
                         if (tetromino.hasSquareAt(j, i)) {
                             if (getColorAt(x + j, y + i + 1) != EMPTY_CELL) {
                                 moves.removeTranslateBottom();
@@ -120,7 +120,35 @@ public class TetrisBoard {
             moves.addRotateRight();
             moves.addRotateLeft();
         }else{
+            TetrominoMoveSelector rotations = new TetrominoMoveSelector();
 
+            //Rotation à gauche
+            tetromino.rotateLeft();
+
+            checkBottom(rotations, tetromino, x, y);
+            checkLeft(rotations, tetromino, x, y);
+            checkRight(rotations, tetromino, x, y);
+
+            if(rotations.canTranslateBottom() && rotations.canTranslateLeft() && rotations.canTranslateRight()){
+                moves.addRotateLeft();
+            }
+
+            //Rotation a droite
+            tetromino.rotateRight();
+            tetromino.rotateRight();
+
+            rotations.clear();
+
+            checkBottom(rotations, tetromino, x, y);
+            checkLeft(rotations, tetromino, x, y);
+            checkRight(rotations, tetromino, x, y);
+
+            if(rotations.canTranslateBottom() && rotations.canTranslateLeft() && rotations.canTranslateRight()){
+                moves.addRotateRight();
+            }
+
+            //On remet en place
+            tetromino.rotateLeft();
         }
     }
 
@@ -129,34 +157,43 @@ public class TetrisBoard {
      * Cette méthode par du bas du plateau de jeu pour remonter au fur et a mesure. Les blocs étant empilés de bas en
      * haut, procéder de cette manière permet d'éviter de traverser un bon nombre de lignes qui ne sont potentiellement
      * pas rempli
-     * @return Renvoie un tableau avec les lignes complètement remplies supprimées, ou null si aucune ne l'a été
+     * @return Renvoie le nombre de lignes complètement remplies supprimées, ou 0 si aucune ne l'a été
      */
-    public int[] deleteRowsFull(){
+    public int checkFullRows(){
+        int totalFullRows = 0; //Nombre de ligne complètes sur le plateau
 
-        //Vide
-        int[] rows = new int[0];
+        int row = -1; //Numéro de ligne
+        int count = 0; // Nombre de ligne complète successives
 
-        for (int i = grid.length - 1; i >= 0; --i) {
-            for (int j = 0; j < grid[i].length; j++) {
-                //Si la valeur de la case est 0 (valeur par défaut), cette ligne n'st pas complète
-                if(grid[i][j] == EMPTY_CELL){
-                    continue;
+        for (int i = 0; i < height; i++) {
+            if(isRowFull(i)){
+                if(row == -1){
+                    row = i;
+                    System.out.println("Row full : " + row);
                 }
+                ++count;
 
-                //Si on arrive ici, c'est que l'on a eu une ligne complete, on peut l'ajouter
-                int index = rows.length;
-
-                //Augmente la capacité du tableau de 1
-                rows = Arrays.copyOf(rows, index + 1);
-
-                //Stocke la ligne
-                rows[index] = j;
+            }else{
+                if(row > -1 && count > 0){
+                    dropLine(row, count);
+                    row = -1;
+                    count = 0;
+                }
             }
         }
 
-        return rows;
+        //Dans le cas de la dernière itération de la boucle, pas de passage dans else possible.
+        if(row > -1 && count > 0){
+            dropLine(row, count);
+        }
+
+        return totalFullRows;
     }
 
+    /**
+     * Incruste un tetromino sur le plateau
+     * @param tetromino Le tetromino à placer
+     */
     public void mergeTetromino(TetrisEngine.MovementSequence tetromino){
 
         for (int i = 0; i < tetromino.getWorkingTetromino().getWidth(); i++) {
@@ -172,6 +209,9 @@ public class TetrisBoard {
         }
     }
 
+    /**
+     * Initialise la grille
+     */
     private void initGrid(){
         grid = new Color[height][width];
         for(Color[] rows : grid){
@@ -180,12 +220,58 @@ public class TetrisBoard {
 
     }
 
+    /**
+     * Défini la couleur de la cellule (x, y)
+     * @param x La composante X de la cellule
+     * @param y La composante Y de la cellule
+     * @param color La couleur à appliquer
+     */
     private void setColorAt(int x, int y, Color color){
         grid[y][x] = color;
     }
 
+    /**
+     * Renvoie la couleur de la cellule (x, y)
+     * @param x La composante X de la cellule
+     * @param y La composante Y de la cellule
+     * @return La couleur de la cellule
+     */
     public Color getColorAt(int x, int y){
         return grid[y][x];
+    }
+
+    /**
+     * Indique si la ligne est complète
+     * @param y Ligne à vérifier
+     * @return True si plein, false sinon
+     */
+    private boolean isRowFull(int y){
+        boolean result = true;
+
+        for (int i = 0; i < width; i++) {
+            result &= (getColorAt(i, y) != EMPTY_CELL);
+        }
+
+        return result;
+    }
+
+    /**
+     * Supprime les lignes
+     * @param rowStart La première ligne
+     * @param count Le nombre de ligne successives
+     */
+    private void dropLine(int rowStart, int count){
+        //Toutes les lignes avant rowStart
+        for (int i = rowStart - 1; i >= 0; i--) {
+
+            //Pour toutes les cases
+            for (int j = 0; j < width; j++) {
+
+                //On les abaisses
+                Color color = getColorAt(j, i);
+                setColorAt(j, i + count, color);
+            }
+        }
     }
 
     public int getWidth() {

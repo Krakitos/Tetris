@@ -7,10 +7,11 @@ import javax.swing.*;
  */
 public class Tetris {
     public static void main(String[] args) {
+        final TetrisController controller = new TetrisController();
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
-                new TetrisController().handleStartAction();
+                controller.handleStartAction();
             }
         });
     }

@@ -18,7 +18,7 @@ public class TetrisEngine extends TetrisObservable implements TickListener {
     public static final int DEFAULT_COLUMNS_NUMBER = 10;
     public static final int DEFAULT_ROWS_NUMBER = 22;
 
-    private static final int DEFAULT_TIMER_TICK = 1000;
+    private static final int DEFAULT_TIMER_TICK = 500;
 
     private TimeManager timeManager;
     private AtomicBoolean isRunning; //Utilisation d'un AtomicBoolean car Timer s'exécute dans un autre processus.
@@ -73,7 +73,7 @@ public class TetrisEngine extends TetrisObservable implements TickListener {
     public void startGame(){
         isRunning.set(true);
 
-        initPlaySequence();
+        newSequence();
 
         timeManager.run();
     }
@@ -100,36 +100,28 @@ public class TetrisEngine extends TetrisObservable implements TickListener {
     public void update(int tick) {
         //Si la mise à jour à entrainer la fin du mouvement (collision)
         if(sequence.update()){
+
             //On place la piece sur le plateau
             gameboard.mergeTetromino(sequence);
 
             //On verifie les lignes pleines
-            int[] fullLines = gameboard.deleteRowsFull();
+            int fullLines = gameboard.checkFullRows();
 
             //Si on a des lignes pleines
-            if(fullLines != null && fullLines.length > 0) {
+            if(fullLines > 0) {
 
                 //On augmente les points de 100 * le nombre de lignes pleines ce tour ci
-                points = 100 * fullLines.length;
+                points = 100 * fullLines;
 
                 //On informe la vue qu'il faut supprimer des lignes
-                fireRowFull(fullLines);
+                //fireRowFull(fullLines);
 
                 //On informe la vue que le score à changer
                 firePointsChanged(points);
-
-                //Le tetromino actuel devient l'ancien suivant
-                current = next;
-
-                //Le suivant est crée aléatoirement
-                next = tetrominosFactory.getTetromino();
-
-                //On démarre une nouvelle séquence
-                sequence.newSequence(current);
-
-                //On informe la vue que le tetromino courant a changé
-                fireCurrentTetrominoChanged(sequence, next);
             }
+
+            newSequence();
+
         }else {
             fireTimerTick(tick, sequence);
         }
@@ -183,11 +175,12 @@ public class TetrisEngine extends TetrisObservable implements TickListener {
     /**
      * Initialize le jeu
      */
-    private void initPlaySequence() {
+    private void newSequence() {
         current = tetrominosFactory.getTetromino();
         next = tetrominosFactory.getTetromino();
 
         sequence.newSequence(current);
+
         fireCurrentTetrominoChanged(sequence, next);
     }
 
@@ -227,6 +220,7 @@ public class TetrisEngine extends TetrisObservable implements TickListener {
          * @return True si le mouvement est fini, false sinon
          */
         public boolean update() {
+
             availableMoves = gameboard.getAvailableMoves(workingTetromino, column, row);
 
             if(availableMoves.canTranslateBottom()){
@@ -238,7 +232,6 @@ public class TetrisEngine extends TetrisObservable implements TickListener {
         }
 
         public void handleKeyboardEvent(int keycode){
-
             availableMoves = gameboard.getAvailableMoves(workingTetromino, column, row);
 
             //Gestion des mutateurs
