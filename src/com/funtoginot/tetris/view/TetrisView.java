@@ -45,22 +45,22 @@ public class TetrisView extends JFrame implements TetrisObserver {
 
         /* Add Menu */
         JMenuBar menuBar = new JMenuBar();
-
-        JMenu menu1 = new JMenu("Quitter");
-
-        JMenuItem quitter = new JMenuItem();
-        menu1.add(quitter);
-
-        menuBar.add(menu1);
-
-        JMenu menu2 = new JMenu("?");
-
-        JMenuItem aPropos = new JMenuItem();
-        menu2.add(aPropos);
-
-        menuBar.add(menu2);
-
         setJMenuBar(menuBar);
+
+        // Define and add two drop down menu to the menubar
+        JMenu fileMenu = new JMenu("Fichier");
+        JMenu questMenu = new JMenu("?");
+        menuBar.add(fileMenu);
+        menuBar.add(questMenu);
+
+        // Create and add simple menu item to one of the drop down menu
+        JMenuItem newAction = new JMenuItem("Nouvelle Partie");
+        JMenuItem exitAction = new JMenuItem("Quitter");
+        JMenuItem aproposAction = new JMenuItem("A Propos");
+
+        fileMenu.add(newAction);
+        fileMenu.add(exitAction);
+        questMenu.add(aproposAction);
 
         /* Center the window
         Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
@@ -79,13 +79,18 @@ public class TetrisView extends JFrame implements TetrisObserver {
 
         pack();
 
+        //Centrer la fenêtre
+        setLocationRelativeTo(null);
+        setVisible(true);
         setVisible(true);
 
         /* Set window size */
         setSize(DEFAULT_WIDTH, DEFAULT_HEIGHT);
-        //setLocationRelativeTo(null);
-        setVisible(true);
+
     }
+
+
+
 
     public void addKeyListener(KeyListener listener) {
         centre.setFocusable(true);
