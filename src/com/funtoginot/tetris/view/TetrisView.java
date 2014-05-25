@@ -6,6 +6,8 @@ import com.funtoginot.tetris.data.tetrominos.Tetromino;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyListener;
 
 /**
@@ -59,7 +61,28 @@ public class TetrisView extends JFrame implements TetrisObserver {
         JMenuItem aproposAction = new JMenuItem("A Propos");
 
         fileMenu.add(newAction);
+
+        exitAction.setMnemonic('x');
+        exitAction.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                System.out.println("Procédure Quitter");
+                TetrisView.this.dispose();
+                System.exit(0);
+            }
+        });
         fileMenu.add(exitAction);
+
+        aproposAction.setMnemonic('a');
+        aproposAction.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                System.out.println("Procédure A Propos");
+                //Boîte du message d'information
+                JOptionPane jop1;
+                jop1 = new JOptionPane();
+                jop1.showMessageDialog(null, "Tetris développé par Morgan FUNTOWICZ et Cédric GINOT" +
+                        "", "A Propos", JOptionPane.INFORMATION_MESSAGE);
+            }
+        });
         questMenu.add(aproposAction);
 
         /* Center the window
@@ -69,8 +92,6 @@ public class TetrisView extends JFrame implements TetrisObserver {
         //On instancie les Jpanels
         centre = new TetrisBoardPane();
         droite = new TetrisMenuPane();
-        // menuPane = new TetrisMenu();
-
 
         setLayout(new BorderLayout());
 
