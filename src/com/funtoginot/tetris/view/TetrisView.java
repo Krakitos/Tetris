@@ -9,11 +9,15 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyListener;
+import java.io.IOException;
 
 /**
  * Created by Morgan on 14/05/2014.
  */
+
 public class TetrisView extends JFrame implements TetrisObserver {
+
+
 
     public static final int DEFAULT_WIDTH = 500;
     public static final int DEFAULT_HEIGHT = 600;
@@ -22,32 +26,32 @@ public class TetrisView extends JFrame implements TetrisObserver {
 
     private TetrisBoardPane centre;
     private TetrisMenuPane droite;
-    //private TetrisMenu menuPane;
 
     private final TetrisEngine model;
 
-    public TetrisView(TetrisEngine model) {
+    public TetrisView(TetrisEngine model) throws IOException {
         this.model = model;
         configureWindow();
     }
 
-    private void configureWindow() {
+    private void configureWindow() throws IOException {
+
 
         try {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
         } catch (Exception e) {
             e.printStackTrace();
         }
+        JFrame frame= new JFrame(TITLE);
+       /* ImagePanel panel = new ImagePanel(new ImageIcon("/Users/cdric/Google Drive/Documents/Polytech/S6 Polytech/Algo Prog 2/Tetris/src/com/funtoginot/tetris/content/images/background.jpg").getImage());
+        frame.getContentPane().add(panel);*/
 
         /* Set default close action */
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
-        /* Show window */
-        setTitle("Tetris");
+        frame.setDefaultCloseOperation(EXIT_ON_CLOSE);
 
         /* Add Menu */
         JMenuBar menuBar = new JMenuBar();
-        setJMenuBar(menuBar);
+        frame.setJMenuBar(menuBar);
 
         // Define and add two drop down menu to the menubar
         JMenu fileMenu = new JMenu("Fichier");
@@ -85,28 +89,23 @@ public class TetrisView extends JFrame implements TetrisObserver {
         });
         questMenu.add(aproposAction);
 
-        /* Center the window
-        Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
-        frame.setLocation(((int) (screen.getWidth() - getWidth()) / 2), ((int) (screen.getHeight() - getHeight()) / 2));*/
-
-        //On instancie les Jpanels
+        //On instancie les JPanels
         centre = new TetrisBoardPane();
         droite = new TetrisMenuPane();
 
-        setLayout(new BorderLayout());
+        frame.add(centre, BorderLayout.CENTER);
+        frame.add(droite, BorderLayout.EAST);
 
-        add(centre, BorderLayout.CENTER);
-        add(droite, BorderLayout.LINE_END);
 
-        pack();
+        frame.pack();
 
-        //Centrer la fenêtre
-        setLocationRelativeTo(null);
-        setVisible(true);
-        setVisible(true);
 
-        /* Set window size */
-        setSize(DEFAULT_WIDTH, DEFAULT_HEIGHT);
+
+        frame.setSize(DEFAULT_WIDTH, DEFAULT_HEIGHT);
+        frame.setLocationRelativeTo(null);
+        frame.setResizable(false);
+        frame.setVisible(true);
+
 
     }
 

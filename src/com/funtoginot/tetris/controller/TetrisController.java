@@ -5,6 +5,7 @@ import com.funtoginot.tetris.view.TetrisView;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.io.IOException;
 
 /**
  * Created by Morgan on 14/05/2014.
@@ -14,7 +15,7 @@ public class TetrisController implements KeyListener {
     private TetrisEngine engine;
     private TetrisView view;
 
-    public TetrisController(){
+    public TetrisController() throws IOException {
 
         try {
             engine = new TetrisEngine(TetrisEngine.DEFAULT_ROWS_NUMBER, TetrisEngine.DEFAULT_COLUMNS_NUMBER);
