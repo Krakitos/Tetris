@@ -4,6 +4,7 @@ import com.funtoginot.tetris.data.TetrisEngine;
 import com.funtoginot.tetris.data.audio.AudioPlayer;
 import com.funtoginot.tetris.view.TetrisView;
 
+import javax.sound.sampled.Clip;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.io.File;
@@ -47,7 +48,7 @@ public class TetrisController implements KeyListener {
     public void handleStartAction(){
         if(!engine.isPlaying()){
             engine.startGame();
-            audioPlayer.play(new File("music/Tetris-Theme-Original.wav"), true);
+            audioPlayer.play(new File("music/Tetris-Theme-Original.wav"), Clip.LOOP_CONTINUOUSLY);
         }
     }
 
@@ -55,14 +56,14 @@ public class TetrisController implements KeyListener {
     public void keyTyped(KeyEvent e) {}
 
     @Override
+    public void keyReleased(KeyEvent e) {}
+
+    @Override
     public void keyPressed(final KeyEvent e) {
         if(isValidKeyboardInput(e.getKeyCode())) {
             view.drawTetromino(engine.handleKeyPressed(e.getKeyCode()));
         }
     }
-
-    @Override
-    public void keyReleased(KeyEvent e) {}
 
     /**
      * Verifie que la touche pressée par l'utilisateur est valide
