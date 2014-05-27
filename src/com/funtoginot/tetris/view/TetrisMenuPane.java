@@ -49,7 +49,7 @@ public class TetrisMenuPane extends JPanel {
 
 
         //Ajout d'un 1er bouton
-        JButton boutonStart = new JButton(new ImageIcon("/Users/cdric/Google Drive/Documents/Polytech/S6 Polytech/Algo Prog 2/Tetris/src/com/funtoginot/tetris/content/images/StartButton.png"));
+        JButton boutonStart = new JButton(new ImageIcon("/Users/cdric/Google Drive/Documents/Polytech/S6 Polytech/Algo Prog 2/Tetris/src/com/funtoginot/tetris/view/images/StartButton.png"));
         boutonStart.setPreferredSize(new Dimension(100, 40));
 
         c = new GridBagConstraints();
@@ -64,7 +64,7 @@ public class TetrisMenuPane extends JPanel {
         add(panelB1, c);
 
         //Ajout d'un 2ème bouton
-        JButton boutonPause = new JButton(new ImageIcon("/Users/cdric/Google Drive/Documents/Polytech/S6 Polytech/Algo Prog 2/Tetris/src/com/funtoginot/tetris/content/images/pauselogo.jpg"));
+        JButton boutonPause = new JButton(new ImageIcon("/Users/cdric/Google Drive/Documents/Polytech/S6 Polytech/Algo Prog 2/Tetris/src/com/funtoginot/tetris/view/images/pauselogo.jpg"));
         boutonPause.setPreferredSize(new Dimension(100, 40));
         c = new GridBagConstraints();
         c.fill = GridBagConstraints.HORIZONTAL;
