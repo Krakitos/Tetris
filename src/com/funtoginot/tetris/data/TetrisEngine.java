@@ -18,11 +18,11 @@ public class TetrisEngine extends TetrisObservable implements TickListener {
     public static final int DEFAULT_COLUMNS_NUMBER = 10;
     public static final int DEFAULT_ROWS_NUMBER = 22;
 
-    private static final int DEFAULT_TIMER_TICK = 500;
+    private static final int DEFAULT_TIMER_TICK = 800;
 
     private TimeManager timeManager;
-    private AtomicBoolean isRunning; //Utilisation d'un AtomicBoolean car Timer s'exécute dans un autre processus.
-    private AtomicBoolean isPaused;
+    private AtomicBoolean isRunning; //Utilisation d'un AtomicBoolean car Timer et L'UI accèdent de façon concurrente à cette variable
+    private AtomicBoolean isPaused; //Idem
 
     private Tetromino current;
     private Tetromino next;
@@ -33,8 +33,7 @@ public class TetrisEngine extends TetrisObservable implements TickListener {
 
     private MovementSequence sequence;
 
-    private int level = 1;
-
+    private int level;
     private int points;
 
     /**
@@ -53,35 +52,36 @@ public class TetrisEngine extends TetrisObservable implements TickListener {
         if(rows < 3) throw new Exception("Impossible de créer un jeu de tetris avec moins de 3 lignes");
         if(columns < 3) throw new Exception("Impossible de créer un jeu de tetris avec moins de 3 colonnes");
 
-        current = next = null;
-        tetrominosFactory = TetrominosFactory.getInstance();
-
         gameboard = new TetrisBoard(rows, columns);
-
-        timeManager = new TimeManager(DEFAULT_TIMER_TICK / level);
-        timeManager.addTickListener(this);
 
         isRunning = new AtomicBoolean(false);
         isPaused = new AtomicBoolean(false);
 
-        sequence = new MovementSequence();
+        current = next = null;
+        tetrominosFactory = TetrominosFactory.getInstance();
     }
 
     /**
      * Lance le jeu
      */
     public void startGame(){
-        isRunning.set(true);
+        points = 0;
+        level = 1;
+
+        timeManager = new TimeManager(DEFAULT_TIMER_TICK / level);
+        timeManager.addTickListener(this);
+
+        sequence = new MovementSequence();
 
         newSequence();
 
+        isRunning.set(true);
         timeManager.run();
     }
 
     /**
      * Met en pause le jeu
      */
-
     public void togglePause(){
         if(isPaused.get()){
             isPaused.set(false);
@@ -113,18 +113,15 @@ public class TetrisEngine extends TetrisObservable implements TickListener {
                 //On augmente les points de 100 * le nombre de lignes pleines ce tour ci
                 points = 100 * fullLines;
 
-                //On informe la vue qu'il faut supprimer des lignes
-                //fireRowFull(fullLines);
-
-                //On informe la vue que le score à changer
-                firePointsChanged(points);
+                //Vérification changement de niveau + mise à jour des points
+                checkPoints();
             }
 
             newSequence();
 
-        }else {
-            fireTimerTick(tick, sequence);
         }
+
+        fireTimerTick(tick, sequence);
     }
 
 
@@ -189,6 +186,15 @@ public class TetrisEngine extends TetrisObservable implements TickListener {
         fireCurrentTetrominoChanged(sequence, next);
     }
 
+    private void checkPoints(){
+        //On informe la vue que le score à changer
+        firePointsChanged(points);
+
+        if(points / 1000 != level){
+            level = points / 1000;
+            fireLevelChanged(level);
+        }
+    }
 
 
     /**
