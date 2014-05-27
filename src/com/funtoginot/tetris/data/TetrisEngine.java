@@ -265,12 +265,10 @@ public class TetrisEngine extends TetrisObservable implements TickListener {
                     }
                     break;
                 }
-                /*case KeyEvent.VK_SPACE : {
-                    if((availableMoves & TetrisBoard.TRANSLATE_BOTTOM) != 0) {
-                        ++row;
-                    }
+                case KeyEvent.VK_SPACE : {
+                    row = gameboard.drop(this);
                     break;
-                }*/
+                }
                 default:{}
             }
         }

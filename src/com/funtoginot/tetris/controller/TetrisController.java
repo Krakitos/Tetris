@@ -72,6 +72,7 @@ public class TetrisController implements KeyListener {
                 || keycode == KeyEvent.VK_DOWN
                 || keycode == KeyEvent.VK_RIGHT
                 || keycode == KeyEvent.VK_LEFT
-                || keycode == KeyEvent.VK_UP;
+                || keycode == KeyEvent.VK_UP
+                || keycode == KeyEvent.VK_SPACE;
     }
 }
