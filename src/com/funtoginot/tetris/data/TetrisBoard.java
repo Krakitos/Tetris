@@ -280,4 +280,16 @@ public class TetrisBoard {
     public int getHeight() {
         return height;
     }
+
+    public int drop(TetrisEngine.MovementSequence sequence) {
+        int lastRow = sequence.getRow();
+
+        TetrominoMoveSelector moveSelector = new TetrominoMoveSelector();
+
+        do{
+            checkBottom(moveSelector, sequence.getWorkingTetromino(), sequence.getColumn(), ++lastRow);
+        }while(moveSelector.canTranslateBottom());
+
+        return lastRow;
+    }
 }
