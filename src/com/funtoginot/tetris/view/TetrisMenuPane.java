@@ -4,6 +4,7 @@ import com.funtoginot.tetris.data.tetrominos.Tetromino;
 import com.funtoginot.tetris.view.components.TetrominoPreview;
 
 import javax.swing.*;
+import javax.swing.border.TitledBorder;
 import java.awt.*;
 
 /**
@@ -11,29 +12,45 @@ import java.awt.*;
  */
 public class TetrisMenuPane extends JPanel {
 
+    public static final Color DEFAULT_COLOR = Color.DARK_GRAY;
 
-    private JPanel partieCours;
-    private JPanel boutons;
+    private JPanel panelPreview;
+    private JPanel panelB1;
+    private JPanel panelB2;
     private TetrominoPreview preview;
 
     public TetrisMenuPane() {
 
 
+        panelPreview = new JPanel();
+        panelB1 = new JPanel();
+        panelB2 = new JPanel();
         preview = new TetrominoPreview();
+
+        panelPreview.setBackground(DEFAULT_COLOR);
+        panelB1.setBackground(DEFAULT_COLOR);
+        panelB2.setBackground(DEFAULT_COLOR);
+
         setLayout(new GridBagLayout());
+
 
         GridBagConstraints c;
         final Insets buttonInsets = new Insets(10, 10, 10, 10);
 
+        panelPreview.setBorder(BorderFactory.createTitledBorder(null, "NEXT", TitledBorder.CENTER, TitledBorder.BOTTOM, new Font("arial", Font.PLAIN, 12), Color.white));
         c = new GridBagConstraints();
         c.fill = GridBagConstraints.HORIZONTAL;
-        c.weightx = 0.5;
-        c.gridx = 0;
-        c.gridy = 0;
-        add(preview, c);
+        c.gridx = c.gridy = 0;
+        c.gridwidth = c.gridheight = 1;
+        c.fill = GridBagConstraints.BOTH;
+        panelPreview.add(preview);
+        c.weightx = c.weighty = 70;
+        add(panelPreview, c);
+
 
         //Ajout d'un 1er bouton
-        JButton boutonStart = new JButton("START");
+        JButton boutonStart = new JButton(new ImageIcon("/Users/cdric/Google Drive/Documents/Polytech/S6 Polytech/Algo Prog 2/Tetris/src/com/funtoginot/tetris/content/images/StartButton.png"));
+        boutonStart.setPreferredSize(new Dimension(100, 40));
 
         c = new GridBagConstraints();
         c.fill = GridBagConstraints.HORIZONTAL;
@@ -41,18 +58,23 @@ public class TetrisMenuPane extends JPanel {
         c.insets = buttonInsets;
         c.gridx = 0;
         c.gridy = 1;
-        preview = new TetrominoPreview();
-        add(boutonStart, c);
+
+        panelB1.add(boutonStart);
+        c.weightx = c.weighty = 30;
+        add(panelB1, c);
 
         //Ajout d'un 2ème bouton
-        JButton boutonQuit = new JButton("QUIT");
+        JButton boutonPause = new JButton(new ImageIcon("/Users/cdric/Google Drive/Documents/Polytech/S6 Polytech/Algo Prog 2/Tetris/src/com/funtoginot/tetris/content/images/pauselogo.jpg"));
+        boutonPause.setPreferredSize(new Dimension(100, 40));
         c = new GridBagConstraints();
         c.fill = GridBagConstraints.HORIZONTAL;
         c.weightx = 0.5;
         c.gridx = 0;
         c.gridy = 2;
-        preview = new TetrominoPreview();
-        add(boutonQuit, c);
+
+        panelB2.add(boutonPause);
+        c.weightx = c.weighty = 30;
+        add(panelB2, c);
 
 
 
@@ -94,7 +116,7 @@ public class TetrisMenuPane extends JPanel {
 
     }
 
-    public void updateNextTetromino(Tetromino tetromino){
+    public void updateNextTetromino(Tetromino tetromino) {
         preview.updateView(tetromino);
     }
 }

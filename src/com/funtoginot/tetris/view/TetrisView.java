@@ -18,9 +18,9 @@ import java.io.IOException;
 public class TetrisView extends JFrame implements TetrisObserver {
 
 
-
     public static final int DEFAULT_WIDTH = 500;
     public static final int DEFAULT_HEIGHT = 600;
+    public static final Color DEFAULT_COLOR = Color.DARK_GRAY;
 
     private static final String TITLE = "Tetris";
 
@@ -42,7 +42,7 @@ public class TetrisView extends JFrame implements TetrisObserver {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        JFrame frame= new JFrame(TITLE);
+        JFrame frame = new JFrame(TITLE);
        /* ImagePanel panel = new ImagePanel(new ImageIcon("/Users/cdric/Google Drive/Documents/Polytech/S6 Polytech/Algo Prog 2/Tetris/src/com/funtoginot/tetris/content/images/background.jpg").getImage());
         frame.getContentPane().add(panel);*/
 
@@ -92,13 +92,13 @@ public class TetrisView extends JFrame implements TetrisObserver {
         //On instancie les JPanels
         centre = new TetrisBoardPane();
         droite = new TetrisMenuPane();
+        droite.setBackground(DEFAULT_COLOR);
 
         frame.add(centre, BorderLayout.CENTER);
         frame.add(droite, BorderLayout.EAST);
 
 
         frame.pack();
-
 
 
         frame.setSize(DEFAULT_WIDTH, DEFAULT_HEIGHT);
@@ -108,8 +108,6 @@ public class TetrisView extends JFrame implements TetrisObserver {
 
 
     }
-
-
 
 
     public void addKeyListener(KeyListener listener) {
@@ -122,7 +120,7 @@ public class TetrisView extends JFrame implements TetrisObserver {
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
-                  droite.updateNextTetromino(tetromino);
+                droite.updateNextTetromino(tetromino);
             }
         });
     }
