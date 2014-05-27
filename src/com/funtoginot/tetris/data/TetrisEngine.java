@@ -176,8 +176,13 @@ public class TetrisEngine extends TetrisObservable implements TickListener {
      * Initialize le jeu
      */
     private void newSequence() {
-        current = tetrominosFactory.getTetromino();
-        next = tetrominosFactory.getTetromino();
+        if(next == null) {
+            current = tetrominosFactory.getTetromino();
+            next = tetrominosFactory.getTetromino();
+        }else{
+            current = next;
+            next = tetrominosFactory.getTetromino();
+        }
 
         sequence.newSequence(current);
 

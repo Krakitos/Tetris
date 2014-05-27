@@ -1,6 +1,7 @@
 package com.funtoginot.tetris.controller;
 
 import com.funtoginot.tetris.data.TetrisEngine;
+import com.funtoginot.tetris.data.audio.AudioPlayer;
 import com.funtoginot.tetris.view.TetrisView;
 
 import java.awt.event.KeyEvent;
@@ -12,6 +13,7 @@ import java.io.IOException;
  */
 public class TetrisController implements KeyListener {
 
+    private AudioPlayer audioPlayer;
     private TetrisEngine engine;
     private TetrisView view;
 
@@ -19,6 +21,7 @@ public class TetrisController implements KeyListener {
 
         try {
             engine = new TetrisEngine(TetrisEngine.DEFAULT_ROWS_NUMBER, TetrisEngine.DEFAULT_COLUMNS_NUMBER);
+            audioPlayer = new AudioPlayer();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -33,6 +36,7 @@ public class TetrisController implements KeyListener {
      * Méthode de traitement pour la mise en pause du jeu
      */
     public void handlePauseAction(){
+        audioPlayer.pause();
         engine.togglePause();
     }
 

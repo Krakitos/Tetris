@@ -18,7 +18,7 @@ import java.io.IOException;
 public class TetrisView extends JFrame implements TetrisObserver {
 
 
-    public static final int DEFAULT_WIDTH = 500;
+    public static final int DEFAULT_WIDTH = 800;
     public static final int DEFAULT_HEIGHT = 600;
     public static final Color DEFAULT_COLOR = Color.DARK_GRAY;
 
@@ -92,11 +92,11 @@ public class TetrisView extends JFrame implements TetrisObserver {
         //On instancie les JPanels
         centre = new TetrisBoardPane();
         droite = new TetrisMenuPane();
+        droite.setSize(400, 0);
         droite.setBackground(DEFAULT_COLOR);
 
         frame.add(centre, BorderLayout.CENTER);
         frame.add(droite, BorderLayout.EAST);
-
 
         frame.pack();
 

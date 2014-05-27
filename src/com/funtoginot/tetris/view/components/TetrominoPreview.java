@@ -1,46 +1,37 @@
+
 package com.funtoginot.tetris.view.components;
 
 import com.funtoginot.tetris.data.tetrominos.Tetromino;
+import com.funtoginot.tetris.view.TetrisBoardPane;
 import com.funtoginot.tetris.view.cell.Cell;
+import com.funtoginot.tetris.view.layout.TetrisLayout;
 
-import javax.swing.*;
 import java.awt.*;
 
 /**
  * Created by morgan on 23/05/14.
  */
-public class TetrominoPreview extends JPanel {
+public class TetrominoPreview extends TetrisBoardPane {
 
-    private GridLayout gridLayout = new GridLayout(1,1);
+    private TetrisLayout gridLayout = new TetrisLayout(4,4);
 
     public TetrominoPreview() {
-        super();
-        setLayout(gridLayout);
-
-        Cell cell = new Cell(Color.BLUE);
-        add(cell);
+        super(4, 4);
     }
 
     public void updateView(Tetromino tetromino){
-        /*gridLayout.setColumns(tetromino.getWidth());
-        gridLayout.setRows(tetromino.getHeight());
 
-        setLayout(gridLayout);
-
-        for (int i = 0; i < tetromino.getWidth(); i++) {
-            for (int j = 0; j < tetromino.getHeight(); j++) {
-                if(tetromino.hasSquareAt(i, j)){
-                    JLabel label = new JLabel();
-                    label.setForeground(tetromino.getColor());
-                    label.setOpaque(true);
-                    add(label);
+        for (int i = 0; i < 4; i++) {
+            for (int j = 0; j < 4; j++) {
+                Cell cell = (Cell) getComponent(j * 4 + i);
+                if(i < tetromino.getWidth() && j < tetromino.getHeight() && tetromino.hasSquareAt(i, j)){
+                    cell.setBackground(tetromino.getColor());
                 }else{
-                    add(new JLabel());
+                    cell.setBackground(Color.BLACK);
                 }
             }
         }
 
-        doLayout();
-        invalidate();*/
+        invalidate();
     }
 }

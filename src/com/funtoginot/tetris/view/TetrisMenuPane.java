@@ -32,7 +32,7 @@ public class TetrisMenuPane extends JPanel {
         panelB2.setBackground(DEFAULT_COLOR);
 
         setLayout(new GridBagLayout());
-
+        panelPreview.setLayout(new BorderLayout());
 
         GridBagConstraints c;
         final Insets buttonInsets = new Insets(10, 10, 10, 10);
@@ -43,7 +43,7 @@ public class TetrisMenuPane extends JPanel {
         c.gridx = c.gridy = 0;
         c.gridwidth = c.gridheight = 1;
         c.fill = GridBagConstraints.BOTH;
-        panelPreview.add(preview);
+        panelPreview.add(preview, BorderLayout.CENTER);
         c.weightx = c.weighty = 70;
         add(panelPreview, c);
 
@@ -76,44 +76,7 @@ public class TetrisMenuPane extends JPanel {
         c.weightx = c.weighty = 30;
         add(panelB2, c);
 
-
-
-        /*
-        //Ajout d'un 1er bouton
-        JButton boutonStart = new JButton("START");
-
-        //Ajout d'un 2ème bouton
-        JButton boutonQuit = new JButton("QUIT");
-
-        //Deux lignes sur une colonne (preview du tetromino suivant + boutons partie en cours)
-        GridLayout grid = new GridLayout(2,1);
-        setLayout(grid);
-
-        preview = new TetrominoPreview();
-        //On crée et ajoute les deux Panels qui vont êtres insérés dans les deux lignes du GridLayout
-        partieCours = new JPanel();
-        boutons = new JPanel();
-
-        //Partie preview
-        GridLayout gridPreview = new GridLayout(1,1);
-        partieCours.setLayout(gridPreview);
-
-        // Partie boutons
-        GridLayout gridInt = new GridLayout(2,1,8,8);
-        boutons.setLayout(gridInt);
-
-
-        //On ajoute les éléments souhaités
-        partieCours.add(preview);
-        boutons.add(boutonStart);
-        boutons.add(boutonQuit);
-
-        add(partieCours);
-        add(boutons);
-
-*/
-
-
+        setPreferredSize(new Dimension(300, 0));
     }
 
     public void updateNextTetromino(Tetromino tetromino) {

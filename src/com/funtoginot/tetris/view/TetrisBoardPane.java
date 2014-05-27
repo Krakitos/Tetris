@@ -2,7 +2,6 @@ package com.funtoginot.tetris.view;
 
 import com.funtoginot.tetris.data.TetrisBoard;
 import com.funtoginot.tetris.data.TetrisEngine;
-import com.funtoginot.tetris.data.tetrominos.Tetromino;
 import com.funtoginot.tetris.view.cell.Cell;
 import com.funtoginot.tetris.view.layout.TetrisLayout;
 
@@ -21,10 +20,14 @@ public class TetrisBoardPane extends JPanel {
     public static final Color DEFAULT_COLOR = Color.BLACK;
 
     public TetrisBoardPane() {
-        setLayout(new TetrisLayout(GRID_ROWS, GRID_COLS));
+        this(GRID_COLS, GRID_ROWS);
+    }
 
-        for (int row = 0; row < GRID_ROWS; row++) {
-            for (int col = 0; col < GRID_COLS; col++) {
+    public TetrisBoardPane(int width, int height) {
+        setLayout(new TetrisLayout(width, height));
+
+        for (int row = 0; row < height; row++) {
+            for (int col = 0; col < width; col++) {
                 Color color = DEFAULT_COLOR;
                 add(new Cell(color), new Point(col, row));
             }
