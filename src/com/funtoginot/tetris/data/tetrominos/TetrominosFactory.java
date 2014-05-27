@@ -48,7 +48,7 @@ public class TetrominosFactory {
     }
 
     public Tetromino getTetromino(){
-       int index = (int)(Math.random() * (tetrominos.length - 1));
+       int index = (int)(Math.random() * (tetrominos.length));
 
         return new Tetromino(tetrominos_colors[index], cloneTetromino(index));
     }
