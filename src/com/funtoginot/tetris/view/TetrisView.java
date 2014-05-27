@@ -101,7 +101,7 @@ public class TetrisView extends JFrame implements TetrisObserver {
         frame.pack();
 
 
-        frame.setSize(DEFAULT_WIDTH, DEFAULT_HEIGHT);
+       // frame.setSize(DEFAULT_WIDTH, DEFAULT_HEIGHT);
         frame.setLocationRelativeTo(null);
         frame.setResizable(false);
         frame.setVisible(true);
