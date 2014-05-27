@@ -173,7 +173,7 @@ public class TetrisEngine extends TetrisObservable implements TickListener {
 
 
     /**
-     * Initialize le jeu
+     * Démarre une nouvelle sequence de placement d'un tetromino
      */
     private void newSequence() {
         if(next == null) {
