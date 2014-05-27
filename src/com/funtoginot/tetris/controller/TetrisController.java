@@ -6,6 +6,7 @@ import com.funtoginot.tetris.view.TetrisView;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.io.File;
 import java.io.IOException;
 
 /**
@@ -46,6 +47,7 @@ public class TetrisController implements KeyListener {
     public void handleStartAction(){
         if(!engine.isPlaying()){
             engine.startGame();
+            audioPlayer.play(new File("music/Tetris-Theme-Original.wav"), true);
         }
     }
 
