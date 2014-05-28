@@ -88,7 +88,7 @@ public class TetrisView extends JFrame implements TetrisObserver {
             }
         });
         questMenu.add(aproposAction);
-
+        frame.setLocationRelativeTo(null);
         //On instancie les JPanels
         centre = new TetrisBoardPane();
         droite = new TetrisMenuPane();
@@ -102,7 +102,7 @@ public class TetrisView extends JFrame implements TetrisObserver {
 
 
        // frame.setSize(DEFAULT_WIDTH, DEFAULT_HEIGHT);
-        frame.setLocationRelativeTo(null);
+
         frame.setResizable(false);
         frame.setVisible(true);
 
