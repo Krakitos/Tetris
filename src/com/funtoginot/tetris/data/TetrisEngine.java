@@ -68,6 +68,9 @@ public class TetrisEngine extends TetrisObservable implements TickListener {
         points = 0;
         level = 1;
 
+        firePointsChanged(points);
+        fireLevelChanged(level);
+
         timeManager = new TimeManager(DEFAULT_TIMER_TICK / level);
         timeManager.addTickListener(this);
 
@@ -197,7 +200,7 @@ public class TetrisEngine extends TetrisObservable implements TickListener {
         //On informe la vue que le score à changer
         firePointsChanged(points);
 
-        if(points / 1000 != level){
+        if(points >= (level - 1) * 1000){
             changeLevel();
         }
     }
