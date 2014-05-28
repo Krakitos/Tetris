@@ -24,7 +24,7 @@ public class TetrisView extends JFrame implements TetrisObserver {
     public static final int DEFAULT_HEIGHT = 600;
     public static final Color DEFAULT_COLOR = Color.DARK_GRAY;
 
-    private static final String TITLE = "Tetris";
+    private static final String TITLE = "Tetris ©";
 
     private TetrisBoardPane centre;
     private TetrisMenuPane droite;

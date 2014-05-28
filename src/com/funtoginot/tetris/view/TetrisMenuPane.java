@@ -45,13 +45,15 @@ public class TetrisMenuPane extends JPanel {
         pointsLbl.setSize(110, 15);
         add(pointsLbl);
 
-        playBtn = new JButton("Jouer");
+        playBtn = new JButton("► Jouer");
         playBtn.setName(PLAY_BTN_NAME);
+        playBtn.setFont(new Font("Calibri",Font.BOLD,15));
         playBtn.setSize(110, 30);
         add(playBtn);
 
-        muteBtn = new JButton("Couper le son");
+        muteBtn = new JButton("♪ Mute");
         muteBtn.setName(MUTE_BTN_NAME);
+        muteBtn.setFont(new Font("Calibri",Font.BOLD,13));
         muteBtn.setSize(110, 30);
         add(muteBtn);
     }
@@ -98,7 +100,7 @@ public class TetrisMenuPane extends JPanel {
             return;
         }
 
-        playBtn.setText("Reprendre");
+        playBtn.setText("► Reprendre");
     }
 
     public void onGameUnPaused() {
@@ -112,7 +114,7 @@ public class TetrisMenuPane extends JPanel {
             return;
         }
 
-        playBtn.setText("Pause");
+        playBtn.setText("▌▌ Pause");
     }
 
     public void onGameStart(){
@@ -126,7 +128,7 @@ public class TetrisMenuPane extends JPanel {
             return;
         }
 
-        playBtn.setText("Pause");
+        playBtn.setText("▌▌ Pause");
     }
 
     public void onGameOver(){
@@ -140,6 +142,6 @@ public class TetrisMenuPane extends JPanel {
             return;
         }
 
-        playBtn.setText("Rejouer");
+        playBtn.setText("► Rejouer");
     }
 }
