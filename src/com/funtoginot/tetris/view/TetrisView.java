@@ -9,6 +9,8 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyListener;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.io.IOException;
 
 /**
@@ -100,6 +102,13 @@ public class TetrisView extends JFrame implements TetrisObserver {
         pack();
 
         centerWindow();
+
+        KeyboardFocusManager.getCurrentKeyboardFocusManager().addPropertyChangeListener(new PropertyChangeListener() {
+            @Override
+            public void propertyChange(PropertyChangeEvent evt) {
+                centre.requestFocus();
+            }
+        });
 
         setResizable(false);
         setVisible(true);
