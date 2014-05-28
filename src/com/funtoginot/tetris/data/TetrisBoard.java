@@ -171,7 +171,7 @@ public class TetrisBoard {
                     row = i;
                 }
                 ++count;
-
+                ++totalFullRows;
             }else{
                 if(row > -1 && count > 0){
                     dropLine(row, count);

@@ -101,24 +101,31 @@ public class TetrisEngine extends TetrisObservable implements TickListener {
         //Si la mise à jour à entrainer la fin du mouvement (collision)
         if(sequence.update()){
 
-            //On place la piece sur le plateau
-            gameboard.mergeTetromino(sequence);
+            //Game over
+            if(sequence.getRow() < sequence.getWorkingTetromino().getHeight()){
+                fireGameOver(points, level);
+                timeManager.stop();
+                return;
+            }else {
 
-            //On verifie les lignes pleines
-            int fullLines = gameboard.checkFullRows();
+                //On place la piece sur le plateau
+                gameboard.mergeTetromino(sequence);
 
-            //Si on a des lignes pleines
-            if(fullLines > 0) {
+                //On verifie les lignes pleines
+                int fullLines = gameboard.checkFullRows();
 
-                //On augmente les points de 100 * le nombre de lignes pleines ce tour ci
-                points = 100 * fullLines;
+                //Si on a des lignes pleines
+                if (fullLines > 0) {
 
-                //Vérification changement de niveau + mise à jour des points
-                checkPoints();
+                    //On augmente les points de 100 * le nombre de lignes pleines ce tour ci
+                    points += 100 * fullLines;
+
+                    //Vérification changement de niveau + mise à jour des points
+                    checkPoints();
+                }
+
+                newSequence();
             }
-
-            newSequence();
-
         }
 
         fireTimerTick(tick, sequence);
@@ -191,9 +198,14 @@ public class TetrisEngine extends TetrisObservable implements TickListener {
         firePointsChanged(points);
 
         if(points / 1000 != level){
-            level = points / 1000;
-            fireLevelChanged(level);
+            changeLevel();
         }
+    }
+
+    private void changeLevel() {
+        ++level;
+        timeManager.changeDelay(DEFAULT_TIMER_TICK / level);
+        fireLevelChanged(level);
     }
 
 
