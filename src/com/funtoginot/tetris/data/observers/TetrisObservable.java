@@ -13,10 +13,6 @@ public abstract class TetrisObservable {
 
     private List<TetrisObserver> observers = new LinkedList<>();
 
-    protected TetrisObservable() {
-
-    }
-
     /**
      * Ajoute un observateur
      * @param observer L'observateur à ajouter
@@ -49,6 +45,17 @@ public abstract class TetrisObservable {
     protected void fireGameStarted(TetrisEngine.MovementSequence current, Tetromino next){
         for(TetrisObserver observer : observers){
             observer.onGameStarted(current, next);
+        }
+    }
+
+    /**
+     * Informe les observateurs que la partie est finie
+     * @param points Le nombre de points actuels
+     * @param level Le niveau actuel
+     */
+    protected void fireGameOver(int points, int level){
+        for(TetrisObserver observer : observers){
+            observer.onGameOver(points, level);
         }
     }
 
@@ -109,6 +116,17 @@ public abstract class TetrisObservable {
     protected void firePointsChanged(int points){
         for(TetrisObserver observer : observers){
             observer.onPointsChanged(points);
+        }
+    }
+
+    /**
+     * Informe que le niveau actuel à changer
+     * @param level Le niveau actuel
+     * @param level Le niveau actuel
+     */
+    protected void fireLevelChanged(int level){
+        for(TetrisObserver observer : observers){
+            observer.onLevelChanged(level);
         }
     }
 }

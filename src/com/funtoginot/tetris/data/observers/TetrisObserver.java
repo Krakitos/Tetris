@@ -37,11 +37,24 @@ public interface TetrisObserver {
     public void onPointsChanged(int points);
 
     /**
+     * INdique un changement de niveau
+     * @param level Le niveau actuel
+     */
+    public void onLevelChanged(int level);
+
+    /**
      * Indique le début d'une partie
      * @param current Le tetromino actuellement en cours de placement
      * @param next Le prochain tetromino
      */
     public void onGameStarted(TetrisEngine.MovementSequence current, Tetromino next);
+
+    /**
+     * Indique que la partie est finie
+     * @param points Le nombre de points actuel
+     * @param level Le niveau actuel
+     */
+    public void onGameOver(int points, int level);
 
     /**
      * Indique que le jeu à été mis en pause
