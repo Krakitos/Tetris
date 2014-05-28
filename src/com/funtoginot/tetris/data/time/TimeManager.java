@@ -47,6 +47,7 @@ public class TimeManager {
     public void changeDelay(int delay){
         timer.cancel();
         tick = delay;
+        timer = new Timer("Time manager");
         run();
     }
 
