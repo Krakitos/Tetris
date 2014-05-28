@@ -8,6 +8,8 @@ import com.funtoginot.tetris.data.time.listeners.TickListener;
 import com.funtoginot.tetris.data.utils.TetrominoMoveSelector;
 
 import java.awt.event.KeyEvent;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
@@ -32,6 +34,8 @@ public class TetrisEngine extends TetrisObservable implements TickListener {
     private TetrisBoard gameboard;
 
     private MovementSequence sequence;
+
+    private Executor threadPool = Executors.newSingleThreadExecutor();
 
     private int level;
     private int points;
@@ -65,73 +69,92 @@ public class TetrisEngine extends TetrisObservable implements TickListener {
      * Lance le jeu
      */
     public void startGame(){
-        points = 0;
-        level = 1;
+        threadPool.execute(new Runnable() {
+            @Override
+            public void run() {
+                points = 0;
+                level = 1;
 
-        firePointsChanged(points);
-        fireLevelChanged(level);
+                firePointsChanged(points);
+                fireLevelChanged(level);
 
-        timeManager = new TimeManager(DEFAULT_TIMER_TICK / level);
-        timeManager.addTickListener(this);
+                gameboard.reset();
 
-        sequence = new MovementSequence();
+                timeManager = new TimeManager(DEFAULT_TIMER_TICK / level);
+                timeManager.addTickListener(TetrisEngine.this);
 
-        newSequence();
+                sequence = new MovementSequence();
 
-        isRunning.set(true);
-        timeManager.run();
+                newSequence();
+
+                isRunning.set(true);
+                timeManager.run();
+
+                fireGameStarted(sequence, next);
+            }
+        });
     }
 
     /**
      * Met en pause le jeu
      */
     public void togglePause(){
-        if(isPaused.get()){
-            isPaused.set(false);
-            timeManager.run();
+        threadPool.execute(new Runnable() {
+            @Override
+            public void run() {
+                if(isPaused.get()){
+                    isPaused.set(false);
+                    timeManager.run();
 
-            fireGameUnPaused();
-        }else{
-            isPaused.set(true);
-            timeManager.stop();
+                    fireGameUnPaused();
+                }else{
+                    isPaused.set(true);
+                    timeManager.stop();
 
-            fireGamePaused();
-        }
+                    fireGamePaused();
+                }
+            }
+        });
     }
 
     @Override
-    public void update(int tick) {
-        //Si la mise à jour à entrainer la fin du mouvement (collision)
-        if(sequence.update()){
+    public void update(final int tick) {
+        threadPool.execute(new Runnable() {
+            @Override
+            public void run() {
+                //Si la mise à jour à entrainer la fin du mouvement (collision)
+                if(sequence.update()){
 
-            //Game over
-            if(sequence.getRow() < sequence.getWorkingTetromino().getHeight()){
-                fireGameOver(points, level);
-                timeManager.stop();
-                return;
-            }else {
+                    //Game over
+                    if(sequence.getRow() < sequence.getWorkingTetromino().getHeight()){
+                        timeManager.stop();
+                        fireGameOver(points, level);
+                        return;
+                    }else {
 
-                //On place la piece sur le plateau
-                gameboard.mergeTetromino(sequence);
+                        //On place la piece sur le plateau
+                        gameboard.mergeTetromino(sequence);
 
-                //On verifie les lignes pleines
-                int fullLines = gameboard.checkFullRows();
+                        //On verifie les lignes pleines
+                        int fullLines = gameboard.checkFullRows();
 
-                //Si on a des lignes pleines
-                if (fullLines > 0) {
+                        //Si on a des lignes pleines
+                        if (fullLines > 0) {
 
-                    //On augmente les points de 100 * le nombre de lignes pleines ce tour ci
-                    points += 100 * fullLines;
+                            //On augmente les points de 100 * le nombre de lignes pleines ce tour ci
+                            points += 100 * fullLines;
 
-                    //Vérification changement de niveau + mise à jour des points
-                    checkPoints();
+                            //Vérification changement de niveau + mise à jour des points
+                            checkPoints();
+                        }
+
+                        newSequence();
+                    }
                 }
 
-                newSequence();
+                fireTimerTick(tick, sequence);
             }
-        }
-
-        fireTimerTick(tick, sequence);
+        });
     }
 
 
@@ -140,7 +163,10 @@ public class TetrisEngine extends TetrisObservable implements TickListener {
      * @param keycode Le code de la touche pressée
      */
     public MovementSequence handleKeyPressed(int keycode){
-        sequence.handleKeyboardEvent(keycode);
+        if(sequence != null){
+            sequence.handleKeyboardEvent(keycode);
+        }
+
         return sequence;
     }
 
@@ -200,15 +226,15 @@ public class TetrisEngine extends TetrisObservable implements TickListener {
         //On informe la vue que le score à changer
         firePointsChanged(points);
 
-        if(points >= (level - 1) * 1000){
-            changeLevel();
-        }
+        checkLevel();
     }
 
-    private void changeLevel() {
-        ++level;
-        timeManager.changeDelay(DEFAULT_TIMER_TICK / level);
-        fireLevelChanged(level);
+    private void checkLevel() {
+        if(level * 1000 < points) {
+            ++level;
+            timeManager.changeDelay(DEFAULT_TIMER_TICK / level);
+            fireLevelChanged(level);
+        }
     }
 
 

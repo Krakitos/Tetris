@@ -292,4 +292,10 @@ public class TetrisBoard {
 
         return lastRow;
     }
+
+    public void reset() {
+        for(Color[] rows : grid){
+            Arrays.fill(rows, EMPTY_CELL);
+        }
+    }
 }

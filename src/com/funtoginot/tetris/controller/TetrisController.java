@@ -2,9 +2,13 @@ package com.funtoginot.tetris.controller;
 
 import com.funtoginot.tetris.data.TetrisEngine;
 import com.funtoginot.tetris.data.audio.AudioPlayer;
+import com.funtoginot.tetris.view.TetrisMenuPane;
 import com.funtoginot.tetris.view.TetrisView;
 
 import javax.sound.sampled.Clip;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.io.File;
@@ -13,7 +17,9 @@ import java.io.IOException;
 /**
  * Created by Morgan on 14/05/2014.
  */
-public class TetrisController implements KeyListener {
+public class TetrisController implements KeyListener, ActionListener{
+
+    private static final String TETRIS_MAIN_THEME_FILE = "music/Tetris-Theme-Original.wav";
 
     private AudioPlayer audioPlayer;
     private TetrisEngine engine;
@@ -30,7 +36,7 @@ public class TetrisController implements KeyListener {
 
         this.view = new TetrisView(engine);
         view.addKeyListener(this);
-
+        view.addActionListener(this);
         engine.addObserver(view);
     }
 
@@ -48,7 +54,7 @@ public class TetrisController implements KeyListener {
     public void handleStartAction(){
         if(!engine.isPlaying()){
             engine.startGame();
-            audioPlayer.play(new File("music/Tetris-Theme-Original.wav"), Clip.LOOP_CONTINUOUSLY);
+            audioPlayer.play(new File(TETRIS_MAIN_THEME_FILE), Clip.LOOP_CONTINUOUSLY);
         }
     }
 
@@ -77,5 +83,20 @@ public class TetrisController implements KeyListener {
                 || keycode == KeyEvent.VK_LEFT
                 || keycode == KeyEvent.VK_UP
                 || keycode == KeyEvent.VK_SPACE;
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        Component source = (Component)e.getSource();
+
+        if(source.getName().equalsIgnoreCase(TetrisMenuPane.PLAY_BTN_NAME)){
+            if(!engine.isPlaying()){
+                handleStartAction();
+            }else {
+                handlePauseAction();
+            }
+        }else if(source.getName().equalsIgnoreCase(TetrisMenuPane.MUTE_BTN_NAME)){
+            System.out.println("Mute");
+        }
     }
 }

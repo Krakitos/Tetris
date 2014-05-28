@@ -57,6 +57,7 @@ public class TimeManager {
     public void stop(){
         timer.cancel();
         timer.purge();
+        timer = new Timer("Time manager");
     }
 
     /**

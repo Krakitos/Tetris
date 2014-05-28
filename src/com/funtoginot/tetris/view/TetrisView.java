@@ -25,12 +25,13 @@ public class TetrisView extends JFrame implements TetrisObserver {
     private static final String TITLE = "Tetris";
 
     private TetrisBoardPane centre;
-    //private TetrisMenuPane droite;
     private TetrisMenuPane droite;
 
     private final TetrisEngine model;
 
     public TetrisView(TetrisEngine model) throws IOException {
+        super(TITLE);
+
         this.model = model;
         configureWindow();
     }
@@ -43,16 +44,13 @@ public class TetrisView extends JFrame implements TetrisObserver {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        JFrame frame = new JFrame(TITLE);
-       /* ImagePanel panel = new ImagePanel(new ImageIcon("/Users/cdric/Google Drive/Documents/Polytech/S6 Polytech/Algo Prog 2/Tetris/src/com/funtoginot/tetris/content/images/background.jpg").getImage());
-        frame.getContentPane().add(panel);*/
 
         /* Set default close action */
-        frame.setDefaultCloseOperation(EXIT_ON_CLOSE);
+        this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 
         /* Add Menu */
         JMenuBar menuBar = new JMenuBar();
-        frame.setJMenuBar(menuBar);
+        this.setJMenuBar(menuBar);
 
         // Define and add two drop down menu to the menubar
         JMenu fileMenu = new JMenu("Fichier");
@@ -67,7 +65,6 @@ public class TetrisView extends JFrame implements TetrisObserver {
 
         fileMenu.add(newAction);
 
-        exitAction.setMnemonic('x');
         exitAction.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 System.out.println("Procédure Quitter");
@@ -77,7 +74,6 @@ public class TetrisView extends JFrame implements TetrisObserver {
         });
         fileMenu.add(exitAction);
 
-        aproposAction.setMnemonic('a');
         aproposAction.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 System.out.println("Procédure A Propos");
@@ -89,31 +85,34 @@ public class TetrisView extends JFrame implements TetrisObserver {
             }
         });
         questMenu.add(aproposAction);
-        frame.setLocationRelativeTo(null);
+
         //On instancie les JPanels
         centre = new TetrisBoardPane();
         droite = new TetrisMenuPane();
         //droite.setSize(400, 0);
         droite.setBackground(DEFAULT_COLOR);
 
-        frame.add(centre, BorderLayout.CENTER);
-        frame.add(droite, BorderLayout.EAST);
+        add(centre, BorderLayout.CENTER);
+        add(droite, BorderLayout.EAST);
 
         droite.setPreferredSize(new Dimension(150, getHeight()));
 
-        frame.pack();
-       // frame.setSize(DEFAULT_WIDTH, DEFAULT_HEIGHT);
+        pack();
 
-        frame.setResizable(false);
-        frame.setVisible(true);
+        centerWindow();
 
-
+        setResizable(false);
+        setVisible(true);
     }
 
 
     public void addKeyListener(KeyListener listener) {
         centre.setFocusable(true);
         centre.addKeyListener(listener);
+    }
+
+    public void addActionListener(ActionListener listener){
+        droite.addActionListener(listener);
     }
 
     @Override
@@ -148,34 +147,33 @@ public class TetrisView extends JFrame implements TetrisObserver {
 
     @Override
     public void onPointsChanged(int points) {
-        System.out.println("Points : " + points);
         droite.updateScore(points);
     }
 
     @Override
     public void onLevelChanged(int level) {
-        System.out.println("Level : " + level);
         droite.updateLevel(level);
     }
 
     @Override
     public void onGameStarted(TetrisEngine.MovementSequence current, Tetromino next) {
-
+        droite.onGameStart();
     }
 
     @Override
     public void onGameOver(int points, int level) {
         JOptionPane.showMessageDialog(this, "Partie terminée ! Niveau : " + level + " - Points : " + points, "Perdu ! ", JOptionPane.INFORMATION_MESSAGE);
+        droite.onGameOver();
     }
 
     @Override
     public void onGamePaused() {
-
+        droite.onGamePause();
     }
 
     @Override
     public void onGameUnPaused() {
-
+        droite.onGameUnPaused();
     }
 
     /**
@@ -198,5 +196,12 @@ public class TetrisView extends JFrame implements TetrisObserver {
                 }
             });
         }
+    }
+
+    private void centerWindow(){
+        Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
+        int x = (int) (screen.getWidth() - getWidth()) /2;
+        int y = (int) (screen.getHeight() - getHeight()) / 2;
+        setLocation(x, y);
     }
 }
