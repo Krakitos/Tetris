@@ -25,6 +25,7 @@ public class TetrisView extends JFrame implements TetrisObserver {
     private static final String TITLE = "Tetris";
 
     private TetrisBoardPane centre;
+    //private TetrisMenuPane droite;
     private TetrisMenuPane droite;
 
     private final TetrisEngine model;
@@ -92,15 +93,15 @@ public class TetrisView extends JFrame implements TetrisObserver {
         //On instancie les JPanels
         centre = new TetrisBoardPane();
         droite = new TetrisMenuPane();
-        droite.setSize(400, 0);
+        //droite.setSize(400, 0);
         droite.setBackground(DEFAULT_COLOR);
 
         frame.add(centre, BorderLayout.CENTER);
         frame.add(droite, BorderLayout.EAST);
 
+        droite.setPreferredSize(new Dimension(150, getHeight()));
+
         frame.pack();
-
-
        // frame.setSize(DEFAULT_WIDTH, DEFAULT_HEIGHT);
 
         frame.setResizable(false);
@@ -147,12 +148,24 @@ public class TetrisView extends JFrame implements TetrisObserver {
 
     @Override
     public void onPointsChanged(int points) {
+        System.out.println("Points : " + points);
+        droite.updateScore(points);
+    }
 
+    @Override
+    public void onLevelChanged(int level) {
+        System.out.println("Level : " + level);
+        droite.updateLevel(level);
     }
 
     @Override
     public void onGameStarted(TetrisEngine.MovementSequence current, Tetromino next) {
 
+    }
+
+    @Override
+    public void onGameOver(int points, int level) {
+        JOptionPane.showMessageDialog(this, "Partie terminée ! Niveau : " + level + " - Points : " + points, "Perdu ! ", JOptionPane.INFORMATION_MESSAGE);
     }
 
     @Override

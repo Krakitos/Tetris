@@ -41,10 +41,12 @@ public class TetrisBoardPane extends JPanel {
         //Mise à jour du tetromino
         for (int i = 0; i < sequence.getWorkingTetromino().getWidth(); i++) {
             for (int j = 0; j < sequence.getWorkingTetromino().getHeight(); j++) {
-                Cell cell = getCellAt(sequence.getColumn() + i, sequence.getRow() + j);
+                if(sequence.getRow() >= 0) {
+                    Cell cell = getCellAt(sequence.getColumn() + i, sequence.getRow() + j);
 
-                if(sequence.getWorkingTetromino().hasSquareAt(i, j)){
-                    cell.setBackground(sequence.getWorkingTetromino().getColor());
+                    if (sequence.getWorkingTetromino().hasSquareAt(i, j)) {
+                        cell.setBackground(sequence.getWorkingTetromino().getColor());
+                    }
                 }
             }
         }

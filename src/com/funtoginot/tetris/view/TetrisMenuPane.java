@@ -8,78 +8,70 @@ import javax.swing.border.TitledBorder;
 import java.awt.*;
 
 /**
- * Created by cdric on 23/05/2014.
+ * Created by Morgan on 28/05/2014.
  */
 public class TetrisMenuPane extends JPanel {
 
-    public static final Color DEFAULT_COLOR = Color.DARK_GRAY;
+    private static final String POINTS_LABEL_TEXT_FORMAT = "Points : %d";
+    private static final String LEVEL_LABEL_TEXT_FORMAT = "Niveau : %d";
 
-    private JPanel panelPreview;
-    private JPanel panelB1;
-    private JPanel panelB2;
     private TetrominoPreview preview;
 
-    public TetrisMenuPane() {
+    private JLabel levelLbl;
+    private JLabel pointsLbl;
 
+    private JButton playBtn;
+    private JButton muteBtn;
 
-        panelPreview = new JPanel();
-        panelB1 = new JPanel();
-        panelB2 = new JPanel();
-        preview = new TetrominoPreview();
+    public TetrisMenuPane(){
+        setLayout(null);
+        preview = new TetrominoPreview(0, 0);
+        add(preview);
 
-        panelPreview.setBackground(DEFAULT_COLOR);
-        panelB1.setBackground(DEFAULT_COLOR);
-        panelB2.setBackground(DEFAULT_COLOR);
+        levelLbl = new JLabel();
+        Font font = new Font("arial", Font.BOLD, 15);
+        levelLbl.setFont(font);
+        levelLbl.setForeground(Color.WHITE);
+        levelLbl.setSize(110, 30);
+        add(levelLbl);
 
-        setLayout(new GridBagLayout());
-        panelPreview.setLayout(new BorderLayout());
+        pointsLbl = new JLabel();
+        pointsLbl.setFont(font);
+        pointsLbl.setForeground(Color.WHITE);
+        pointsLbl.setSize(110, 15);
+        add(pointsLbl);
 
-        GridBagConstraints c;
-        final Insets buttonInsets = new Insets(10, 10, 10, 10);
+        playBtn = new JButton("Jouer");
+        playBtn.setSize(110, 30);
+        add(playBtn);
+        muteBtn = new JButton("Couper le son");
+        muteBtn.setSize(110, 30);
+        add(muteBtn);
+    }
 
-        panelPreview.setBorder(BorderFactory.createTitledBorder(null, "NEXT", TitledBorder.CENTER, TitledBorder.BOTTOM, new Font("arial", Font.PLAIN, 12), Color.white));
-        c = new GridBagConstraints();
-        c.fill = GridBagConstraints.HORIZONTAL;
-        c.gridx = c.gridy = 0;
-        c.gridwidth = c.gridheight = 1;
-        c.fill = GridBagConstraints.BOTH;
-        panelPreview.add(preview, BorderLayout.CENTER);
-        c.weightx = c.weighty = 70;
-        add(panelPreview, c);
+    public void updateLevel(int level){
+        levelLbl.setText(String.format(LEVEL_LABEL_TEXT_FORMAT, level));
+    }
 
-
-        //Ajout d'un 1er bouton
-        JButton boutonStart = new JButton(new ImageIcon("images/StartButton.png"));
-        boutonStart.setPreferredSize(new Dimension(100, 40));
-
-        c = new GridBagConstraints();
-        c.fill = GridBagConstraints.HORIZONTAL;
-        c.weightx = 0.5;
-        c.insets = buttonInsets;
-        c.gridx = 0;
-        c.gridy = 1;
-
-        panelB1.add(boutonStart);
-        c.weightx = c.weighty = 30;
-        add(panelB1, c);
-
-        //Ajout d'un 2ème bouton
-        JButton boutonPause = new JButton(new ImageIcon("images/pauselogo.jpg"));
-        boutonPause.setPreferredSize(new Dimension(100, 40));
-        c = new GridBagConstraints();
-        c.fill = GridBagConstraints.HORIZONTAL;
-        c.weightx = 0.5;
-        c.gridx = 0;
-        c.gridy = 2;
-
-        panelB2.add(boutonPause);
-        c.weightx = c.weighty = 30;
-        add(panelB2, c);
-
-        setPreferredSize(new Dimension(300, 0));
+    public void updateScore(int score){
+        pointsLbl.setText(String.format(POINTS_LABEL_TEXT_FORMAT, score));
     }
 
     public void updateNextTetromino(Tetromino tetromino) {
         preview.updateView(tetromino);
+    }
+
+    @Override
+    public void setPreferredSize(Dimension preferredSize) {
+        super.setPreferredSize(preferredSize);
+        preview.setSize(new Dimension((int) preferredSize.getWidth(), (int) preferredSize.getWidth()));
+        preview.setBorder(BorderFactory.createTitledBorder(null, "NEXT", TitledBorder.CENTER, TitledBorder.BOTTOM, new Font("arial", Font.PLAIN, 12), Color.white));
+
+        levelLbl.setLocation(10, preview.getHeight() + 20);
+        pointsLbl.setLocation(10, levelLbl.getY() + levelLbl.getHeight() + 20);
+
+        playBtn.setLocation(10, pointsLbl.getY() + pointsLbl.getHeight() + 20);
+        muteBtn.setLocation(10, playBtn.getY() + playBtn.getHeight() + 20);
+        invalidate();
     }
 }
