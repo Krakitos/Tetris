@@ -128,6 +128,7 @@ public class TetrisEngine extends TetrisObservable implements TickListener {
                     //Game over
                     if(sequence.getRow() < sequence.getWorkingTetromino().getHeight()){
                         timeManager.stop();
+                        isRunning.set(false);
                         fireGameOver(points, level);
                         return;
                     }else {
